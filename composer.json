@@ -1,0 +1,66 @@
+{
+    "name": "tipoff/laravel-agora-api",
+    "description": "Laravel Package for wrapper of Agora API",
+    "keywords": [
+        "tipoff",
+        "laravel-agora-api"
+    ],
+    "homepage": "https://github.com/tipoff/laravel-agora-api",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tipoff",
+            "email": "packages@tipoff.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "tipoff/authorization": "^2.0.0",
+        "tipoff/support": "^1.4.10"
+    },
+    "require-dev": {
+        "tipoff/test-support": "^1.0.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tipoff\\LaravelAgoraApi\\": "src",
+            "Tipoff\\LaravelAgoraApi\\Database\\Factories\\": "database/factories",
+            "Tipoff\\LaravelAgoraApi\\Database\\Seeders\\": "database/seeders"
+        },
+        "files": [
+            "src/Helpers/SerpApiSearch.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tipoff\\LaravelAgoraApi\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit --colors=always",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tipoff\\LaravelAgoraApi\\LaravelAgoraApiServiceProvider"
+            ],
+            "aliases": {
+                "SerpApiSearch": "Tipoff\\LaravelAgoraApi\\Facades\\SerpApiSearchFacade"
+            }
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
