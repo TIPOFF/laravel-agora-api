@@ -14,7 +14,8 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
         $package
             ->name('laravel-agora-api')
             ->hasViews()
-            ->hasConfigFile();
+            ->hasConfigFile()
+            ->hasRoute('routes/web.php');
     }
 
     public function register()
