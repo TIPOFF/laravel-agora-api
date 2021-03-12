@@ -1,6 +1,11 @@
 <?php
 
 return [
-    'api_key' => env('SERPAPI_API_KEY'),
-    'search_engine' => env('SERPAPI_ENGINE', 'google')
+    'api_key' => env('AGORA_API_KEY'),
+
+    'driver' => env('AGORA_DRIVER', 'pusher'),
+    
+    'middleware' => [
+        'auth'
+    ],
 ];

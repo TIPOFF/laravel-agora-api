@@ -29,10 +29,7 @@
             "Tipoff\\LaravelAgoraApi\\": "src",
             "Tipoff\\LaravelAgoraApi\\Database\\Factories\\": "database/factories",
             "Tipoff\\LaravelAgoraApi\\Database\\Seeders\\": "database/seeders"
-        },
-        "files": [
-            "src/Helpers/SerpApiSearch.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
@@ -51,10 +48,7 @@
         "laravel": {
             "providers": [
                 "Tipoff\\LaravelAgoraApi\\LaravelAgoraApiServiceProvider"
-            ],
-            "aliases": {
-                "SerpApiSearch": "Tipoff\\LaravelAgoraApi\\Facades\\SerpApiSearchFacade"
-            }
+            ]
         }
     },
     "repositories": [
