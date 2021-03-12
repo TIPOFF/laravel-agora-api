@@ -12,7 +12,7 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
     public function configureTipoffPackage(TipoffPackage $package): void
     {
         $package
-            ->name('laravel-agora-api')
+            ->name('agora')
             ->hasViews()
             ->hasConfigFile()
             ->hasRoute('routes/web.php');
