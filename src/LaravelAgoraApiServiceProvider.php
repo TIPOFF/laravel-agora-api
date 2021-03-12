@@ -28,6 +28,7 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
     protected function routeConfiguration()
     {
         return [
+            'prefix' => config('agora.prefix'),
             'middleware' => config('agora.middleware'),
         ];
     }
