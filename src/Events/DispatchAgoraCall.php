@@ -10,7 +10,9 @@ use Illuminate\Queue\SerializesModels;
 
 class DispatchAgoraCall implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $agoraChannel;
     public $senderId;
