@@ -5,7 +5,9 @@ return [
 
     'driver' => env('AGORA_DRIVER', 'pusher'),
 
-    'prefix' => 'agora',
+    'prefix' => env('AGORA_ROUTE_PREFIX', 'agora'),
+
+    'channel_name' => env('AGORA_CHANNEL_NAME', 'agora-channel'),
     
     'middleware' => [
         'auth'
