@@ -12,7 +12,7 @@ class DispatchAgoraCall implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $channel;
+    public $agoraChannel;
     public $senderId;
     public $recipientId;
 
@@ -21,9 +21,9 @@ class DispatchAgoraCall implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($channel, $senderId, $recipientId)
+    public function __construct($agoraChannel, $senderId, $recipientId)
     {
-        $this->channel = $channel;
+        $this->agoraChannel = $agoraChannel;
         $this->senderId = $senderId;
         $this->recipientId = $recipientId;
     }
