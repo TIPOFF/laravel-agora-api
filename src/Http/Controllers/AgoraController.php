@@ -8,5 +8,6 @@ class AgoraController extends Controller
 {
     public function retrieveToken(Request $request)
     {
+        return true;
     }
 }

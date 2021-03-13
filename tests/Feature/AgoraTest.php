@@ -8,8 +8,8 @@ class AgoraTest extends TestCase
 {
     public function testUnauthenticatedUsersCannotRetrieveAToken()
     {
-        $response = $this->get('/retrieve-token');
+        $response = $this->postJson('/'.config('agora.routes.prefix').'/retrieve-token');
 
-        $response->assertStatus(404);
+        $response->assertStatus(401);
     }
 }
