@@ -2,7 +2,8 @@
 
 return [
     'credentials' => [
-        'api_key' => env('AGORA_API_KEY'),
+        'app_id' => env('AGORA_APP_ID'),
+        'certificate' => env('AGORA_APP_CERTIFICATE'),
     ],
 
     'routes' => [
