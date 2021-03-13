@@ -15,7 +15,7 @@ class Message
         $date = new \DateTime("now", new \DateTimeZone('UTC'));
         $this->ts = $date->getTimestamp() + 24 * 3600;
 
-        $this->privileges = array();
+        $this->privileges = [];
     }
 
     public function packContent()
@@ -27,6 +27,7 @@ class Message
             $buffer = array_merge($buffer, unpack("C*", pack("v", $key)));
             $buffer = array_merge($buffer, unpack("C*", pack("V", $value)));
         }
+
         return $buffer;
     }
 
@@ -40,7 +41,7 @@ class Message
         $size = unpack("v", substr($msg, $pos, 2))[1];
         $pos += 2;
 
-        $privileges = array();
+        $privileges = [];
         for ($i = 0; $i < $size; $i++) {
             $key = unpack("v", substr($msg, $pos, 2));
             $pos += 2;
@@ -56,7 +57,7 @@ class Message
 
 class AccessToken
 {
-    const Privileges = array(
+    const Privileges = [
         "kJoinChannel" => 1,
         "kPublishAudioStream" => 2,
         "kPublishVideoStream" => 3,
@@ -71,17 +72,20 @@ class AccessToken
         "kInvitePublishDataStream" => 12,
         "kAdministrateChannel" => 101,
         "kRtmLogin" => 1000,
-    );
+    ];
 
-    public $appID, $appCertificate, $channelName, $uid;
+    public $appID;
+    public $appCertificate;
+    public $channelName;
+    public $uid;
     public $message;
 
-    function __construct()
+    public function __construct()
     {
         $this->message = new Message();
     }
 
-    function setUid($uid)
+    public function setUid($uid)
     {
         if ($uid === 0) {
             $this->uid = "";
@@ -90,22 +94,23 @@ class AccessToken
         }
     }
 
-    function is_nonempty_string($name, $str)
+    public function is_nonempty_string($name, $str)
     {
         if (is_string($str) && $str !== "") {
             return true;
         }
         echo $name . " check failed, should be a non-empty string";
+
         return false;
     }
 
-    static function init($appID, $appCertificate, $channelName, $uid)
+    public static function init($appID, $appCertificate, $channelName, $uid)
     {
         $accessToken = new AccessToken();
 
-        if (!$accessToken->is_nonempty_string("appID", $appID) ||
-            !$accessToken->is_nonempty_string("appCertificate", $appCertificate) ||
-            !$accessToken->is_nonempty_string("channelName", $channelName)) {
+        if (! $accessToken->is_nonempty_string("appID", $appID) ||
+            ! $accessToken->is_nonempty_string("appCertificate", $appCertificate) ||
+            ! $accessToken->is_nonempty_string("channelName", $channelName)) {
             return null;
         }
 
@@ -115,37 +120,41 @@ class AccessToken
 
         $accessToken->setUid($uid);
         $accessToken->message = new Message();
+
         return $accessToken;
     }
 
-    static function initWithToken($token, $appCertificate, $channel, $uid)
+    public static function initWithToken($token, $appCertificate, $channel, $uid)
     {
         $accessToken = new AccessToken();
-        if (!$accessToken->extract($token, $appCertificate, $channel, $uid)) {
+        if (! $accessToken->extract($token, $appCertificate, $channel, $uid)) {
             return null;
         }
+
         return $accessToken;
     }
 
-    function addPrivilege($key, $expireTimestamp)
+    public function addPrivilege($key, $expireTimestamp)
     {
         $this->message->privileges[$key] = $expireTimestamp;
+
         return $this;
     }
 
-    function extract($token, $appCertificate, $channelName, $uid)
+    public function extract($token, $appCertificate, $channelName, $uid)
     {
         $ver_len = 3;
         $appid_len = 32;
         $version = substr($token, 0, $ver_len);
         if ($version !== "006") {
             echo 'invalid version ' . $version;
+
             return false;
         }
 
-        if (!$this->is_nonempty_string("token", $token) ||
-            !$this->is_nonempty_string("appCertificate", $appCertificate) ||
-            !$this->is_nonempty_string("channelName", $channelName)) {
+        if (! $this->is_nonempty_string("token", $token) ||
+            ! $this->is_nonempty_string("appCertificate", $appCertificate) ||
+            ! $this->is_nonempty_string("channelName", $channelName)) {
             return false;
         }
 
@@ -174,10 +183,11 @@ class AccessToken
         $this->appCertificate = $appCertificate;
         $this->channelName = $channelName;
         $this->setUid($uid);
+
         return true;
     }
 
-    function build()
+    public function build()
     {
         $msg = $this->message->packContent();
         $val = array_merge(unpack("C*", $this->appID), unpack("C*", $this->channelName), unpack("C*", $this->uid), $msg);
@@ -190,6 +200,7 @@ class AccessToken
         $content = array_merge(unpack("C*", packString($sig)), unpack("C*", pack("V", $crc_channel_name)), unpack("C*", pack("V", $crc_uid)), unpack("C*", pack("v", count($msg))), $msg);
         $version = "006";
         $ret = $version . $this->appID . base64_encode(implode(array_map("chr", $content)));
+
         return $ret;
     }
 }
