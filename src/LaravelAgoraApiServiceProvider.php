@@ -22,6 +22,8 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
         Route::group($this->routeConfiguration(), function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
+
+        $this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
     }
 
     protected function routeConfiguration()
