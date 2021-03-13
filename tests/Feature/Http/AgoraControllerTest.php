@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Http;
 
 use Tipoff\LaravelAgoraApi\Tests\TestCase;
 
-class AgoraTest extends TestCase
+class AgoraControllerTest extends TestCase
 {
     public function testUnauthenticatedUsersCannotRetrieveAToken()
     {
