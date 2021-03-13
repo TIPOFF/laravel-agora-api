@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class AgoraController extends Controller
 {
-    public function retrieveToken(Request $request) {
-        
+    public function retrieveToken(Request $request)
+    {
     }
 }

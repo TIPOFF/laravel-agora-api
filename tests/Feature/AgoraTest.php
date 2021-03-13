@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tipoff\LaravelAgoraApi\Tests\TestCase;
 
 class AgoraTest extends TestCase
