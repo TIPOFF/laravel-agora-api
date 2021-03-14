@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Tipoff\Authorization\Permissions\BasePermissionsMigration;
 
-class AddFeePermissions extends BasePermissionsMigration
+class AddVideoCallPermissions extends BasePermissionsMigration
 {
     public function up()
     {
