@@ -11,6 +11,7 @@ class AgoraController extends Controller
 {
     public function retrieveToken(Request $request)
     {
+        /** @psalm-suppress NoInterfaceProperties */
         return RtcTokenBuilder::buildTokenWithUserAccount(
             config('agora.credentials.app_id'),
             config('agora.credentials.certificate'),
