@@ -15,4 +15,11 @@ class AgoraControllerTest extends TestCase
 
         $response->assertStatus(401);
     }
+
+    public function testUnauthenticatedUsersCannotPlaceACall()
+    {
+        $response = $this->postJson(route('agora.place-call'));
+
+        $response->assertStatus(401);
+    }
 }
