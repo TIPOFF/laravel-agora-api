@@ -1,6 +1,6 @@
 <?php
 
-namespace Tipoff\LaravelAgoraApi;
+namespace Tipoff\LaravelAgoraApi\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;

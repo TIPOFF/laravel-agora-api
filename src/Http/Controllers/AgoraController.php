@@ -5,7 +5,7 @@ namespace Tipoff\LaravelAgoraApi\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tipoff\LaravelAgoraApi\AgoraDynamicKey\RtcTokenBuilder;
-use Tipoff\LaravelAgoraApi\DispatchAgoraCall;
+use Tipoff\LaravelAgoraApi\Events\DispatchAgoraCall;
 
 class AgoraController extends Controller
 {
