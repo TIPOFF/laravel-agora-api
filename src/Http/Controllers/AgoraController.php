@@ -11,11 +11,15 @@ class AgoraController extends Controller
 {
     public function retrieveToken(Request $request)
     {
+        $request->validate([
+            'channel_name' => 'required|string',
+        ]);
+
         /** @psalm-suppress NoInterfaceProperties */
         return RtcTokenBuilder::buildTokenWithUserAccount(
             config('agora.credentials.app_id'),
             config('agora.credentials.certificate'),
-            $request->channelName,
+            $request->input('channel_name'),
             Auth::user()->name,
             RtcTokenBuilder::RoleAttendee,
             now()->getTimestamp() + 3600
@@ -24,6 +28,11 @@ class AgoraController extends Controller
 
     public function placeCall(Request $request)
     {
+        $request->validate([
+            'channel_name' => 'required|string',
+            'recipient_id' => 'required|exists:users,id',
+        ]);
+
         broadcast(new DispatchAgoraCall(
             $request->input('channel_name'),
             Auth::id(),
