@@ -22,7 +22,8 @@ class AgoraController extends Controller
         );
     }
 
-    public function placeCall(Request $request) {
+    public function placeCall(Request $request)
+    {
         broadcast(new DispatchAgoraCall(
             $request->input('channel_name'),
             Auth::id(),
