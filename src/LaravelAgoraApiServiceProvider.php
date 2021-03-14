@@ -40,9 +40,4 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
             'middleware' => config('agora.routes.middleware'),
         ];
     }
-
-    public function register()
-    {
-        parent::register();
-    }
 }
