@@ -9,6 +9,7 @@ class AuthorizeAgoraActions
 {
     public function handle($request, Closure $next)
     {
+        /** @psalm-suppress UndefinedInterfaceMethod */
         if (Auth::user()->hasPermissionTo('make video call')) {
             return $next($request);
         } else {
