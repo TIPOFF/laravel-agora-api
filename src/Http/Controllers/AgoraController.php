@@ -16,14 +16,16 @@ class AgoraController extends Controller
         ]);
 
         /** @psalm-suppress NoInterfaceProperties */
-        return RtcTokenBuilder::buildTokenWithUserAccount(
-            config('agora.credentials.app_id'),
-            config('agora.credentials.certificate'),
-            $request->input('channel_name'),
-            Auth::user()->name,
-            RtcTokenBuilder::RoleAttendee,
-            now()->getTimestamp() + 3600
-        );
+        return response()->json([
+            'token' => RtcTokenBuilder::buildTokenWithUserAccount(
+                config('agora.credentials.app_id'),
+                config('agora.credentials.certificate'),
+                $request->input('channel_name'),
+                Auth::user()->name,
+                0, // RtcTokenBuilder::RoleAttendee is throwing an `Undefined constant` error for some reason. Leaving this for now.
+                now()->getTimestamp() + 3600
+            )
+        ]);
     }
 
     public function placeCall(Request $request)
