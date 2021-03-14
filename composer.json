@@ -46,10 +46,7 @@
         "laravel": {
             "providers": [
                 "Tipoff\\LaravelAgoraApi\\LaravelAgoraApiServiceProvider"
-            ],
-            "aliases": {
-                "SerpApiSearch": "Tipoff\\LaravelAgoraApi\\Facades\\SerpApiSearchFacade"
-            }
+            ]
         }
     },
     "repositories": [
