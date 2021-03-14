@@ -11,6 +11,8 @@
         <directory name="src"/>
         <ignoreFiles>
             <directory name="vendor"/>
+            <file name="src/AgoraDynamicKey/AccessToken.php"/>
+            <file name="src/AgoraDynamicKey/RtcTokenBuilder.php"/>
         </ignoreFiles>
     </projectFiles>
-</psalm>
+<plugins><pluginClass class="Psalm\LaravelPlugin\Plugin"/></plugins></psalm>

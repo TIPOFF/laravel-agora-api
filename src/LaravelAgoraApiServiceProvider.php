@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tipoff\LaravelAgoraApi;
 
-use SerpApiSearch;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
+use Tipoff\LaravelAgoraApi\Http\Middleware\AuthorizeAgoraActions;
 use Tipoff\Support\TipoffPackage;
 use Tipoff\Support\TipoffServiceProvider;
 
@@ -13,20 +15,29 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
     public function configureTipoffPackage(TipoffPackage $package): void
     {
         $package
-            ->name('laravel-agora-api')
-            ->hasViews()
+            ->name('agora')
             ->hasConfigFile();
     }
 
-    public function register()
+    public function boot()
     {
-        parent::register();
-
-        $this->app->bind(SerpApiSearch::class, function () {
-            $api_key = config('laravel-agora-api.api_key');
-            $engine = config('laravel-agora-api.search_engine');
-
-            return new SerpApiSearch($api_key, $engine);
+        Route::group($this->routeConfiguration(), function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
+
+        $this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
+
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware('has-agora-permission', AuthorizeAgoraActions::class);
+
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+    }
+
+    protected function routeConfiguration()
+    {
+        return [
+            'prefix' => config('agora.routes.prefix'),
+            'middleware' => config('agora.routes.middleware'),
+        ];
     }
 }

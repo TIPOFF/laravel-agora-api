@@ -19,6 +19,8 @@ You can publish the config file with:
 php artisan vendor:publish --provider="Tipoff\LaravelAgoraApi\LaravelAgoraApiServiceProvider" --tag="laravel-agora-api-config"
 ```
 
+Set up broadcasting in your Laravel app as per the docs.
+
 This is the contents of the published config file:
 
 ```php
