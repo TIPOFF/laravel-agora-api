@@ -16,10 +16,8 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "beyondcode/laravel-websockets": "^1.11",
-        "pusher/pusher-php-server": "^5.0",
-        "tipoff/authorization": "^2.0.0",
-        "tipoff/support": "^1.4.10"
+        "tipoff/authorization": "^2.5.5",
+        "tipoff/support": "^1.6.3"
     },
     "require-dev": {
         "psalm/plugin-laravel": "^1.4",
