@@ -5,6 +5,7 @@ namespace Tipoff\LaravelAgoraApi\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tipoff\LaravelAgoraApi\AgoraDynamicKey\RtcTokenBuilder;
+use Tipoff\LaravelAgoraApi\DispatchAgoraCall;
 
 class AgoraController extends Controller
 {
@@ -18,5 +19,13 @@ class AgoraController extends Controller
             RtcTokenBuilder::RoleAttendee,
             now()->getTimestamp() + 3600
         );
+    }
+
+    public function placeCall(Request $request) {
+        broadcast(new DispatchAgoraCall(
+            $request->input('channel_name'),
+            Auth::id(),
+            $request->input('recipient_id')
+        ))->toOthers();
     }
 }
