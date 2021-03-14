@@ -70,7 +70,7 @@ class AgoraControllerTest extends TestCase
 
         $response = $this->actingAs(self::createPermissionedUser('make video call', true))
             ->postJson(route('agora.retrieve-token'), [
-                'channel_name' => $this->faker->word
+                'channel_name' => $this->faker->word,
             ]);
 
         $response->assertStatus(200)
@@ -88,7 +88,7 @@ class AgoraControllerTest extends TestCase
         $response = $this->actingAs(self::createPermissionedUser('make video call', true))
             ->postJson(route('agora.place-call'), [
                 'channel_name' => $this->faker->word,
-                'recipient_id' => User::factory()->create()->id
+                'recipient_id' => User::factory()->create()->id,
             ]);
 
         Event::assertDispatched(DispatchAgoraCall::class);

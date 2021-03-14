@@ -24,7 +24,7 @@ class AgoraController extends Controller
                 Auth::user()->name,
                 0, // RtcTokenBuilder::RoleAttendee is throwing an `Undefined constant` error for some reason. Leaving this for now.
                 now()->getTimestamp() + 3600
-            )
+            ),
         ]);
     }
 
