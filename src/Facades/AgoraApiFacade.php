@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \Google_Search
  */
-class SerpApiSearchFacade extends Facade
+class AgoraApiFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'serp-api-search';
+        return 'agora-api';
     }
 }
