@@ -11,7 +11,7 @@ class AgoraControllerTest extends TestCase
 
     public function testUnauthenticatedUsersCannotRetrieveAToken()
     {
-        $response = $this->postJson('/'.config('agora.routes.prefix').'/retrieve-token');
+        $response = $this->postJson(route('agora.retrieve-token'));
 
         $response->assertStatus(401);
     }
