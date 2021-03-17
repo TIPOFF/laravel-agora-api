@@ -4,7 +4,7 @@
 ![Tests](https://github.com/tipoff/laravel-agora-api/workflows/Tests/badge.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/tipoff/laravel-agora-api.svg?style=flat-square)](https://packagist.org/packages/tipoff/laravel-agora-api)
 
-This is where your description should go.
+This is where your description should go. (API wrapper + video conferencing Vue component)
 
 ## Installation
 
@@ -19,14 +19,21 @@ You can publish the config file with:
 php artisan vendor:publish --provider="Tipoff\LaravelAgoraApi\LaravelAgoraApiServiceProvider" --tag="laravel-agora-api-config"
 ```
 
+
+### Install NPM Dependencies
+
+```
+npm i agora-rtc-sdk
+```
+
+### Publish and Register the Vue component
+
+
+### Set Up Broadcasting and Laravel Echo
+
 Set up broadcasting in your Laravel app as per the docs.
 
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
+Uncomment Echo in `resources/js/bootstrap.js`
 
 ## Testing
 

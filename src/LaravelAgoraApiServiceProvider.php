@@ -16,7 +16,8 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
     {
         $package
             ->name('agora')
-            ->hasConfigFile();
+            ->hasConfigFile()
+            ->hasAssets();
     }
 
     public function boot()
