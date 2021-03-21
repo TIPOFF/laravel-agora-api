@@ -20,6 +20,19 @@ php artisan vendor:publish --provider="Tipoff\LaravelAgoraApi\LaravelAgoraApiSer
 ```
 
 
+## Optional Frontend Vue Resources
+
+Comes with a set of optional Vue components (Not required to use the server side functionality.) (Write up instructions from this bullet list:)
+
+ - Enable echo
+ - Install Vue and Vuex
+ - Publish assets
+ - Register components
+ - Register Vuex module (Note that using a module means that they can tap into the data in custom components as well.)
+ - Enable Echo
+ - Run Laravel Mix
+
+
 ### Install NPM Dependencies
 
 ```
