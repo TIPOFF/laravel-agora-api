@@ -16,8 +16,8 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "tipoff/authorization": "^2.5.5",
-        "tipoff/support": "^1.7.2"
+        "tipoff/authorization": "^2.6.2",
+        "tipoff/support": "^1.8.5"
     },
     "require-dev": {
         "psalm/plugin-laravel": "^1.4",
