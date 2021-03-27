@@ -34,11 +34,11 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         $this->publishes([
-            __DIR__.'/../config/agora.php' => config_path('agora.php')
+            __DIR__.'/../config/agora.php' => config_path('agora.php'),
         ], 'agora-config');
 
         $this->publishes([
-            __DIR__.'/../resources/js' => resource_path('vendor/laravel-agora-api/js')
+            __DIR__.'/../resources/js' => resource_path('vendor/laravel-agora-api/js'),
         ], 'agora-js');
     }
 
