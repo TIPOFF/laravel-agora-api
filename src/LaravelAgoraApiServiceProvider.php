@@ -38,7 +38,7 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
         ], 'agora-config');
 
         $this->publishes([
-            __DIR__.'/../resources/js' => resource_path('vendor/laravel-agora-api/js')
+            __DIR__.'/../resources/js' => resource_path('js/vendor/laravel-agora-api')
         ], 'agora-js');
     }
 
