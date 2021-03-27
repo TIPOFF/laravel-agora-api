@@ -95,4 +95,19 @@ class AgoraControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function testNonexistentUsersCannotBeCalled()
+    {
+        Event::fake();
+
+        $response = $this->actingAs(self::createPermissionedUser('make video call', true))
+            ->postJson(route('agora.place-call'), [
+                'channel_name' => $this->faker->word,
+                'recipient_id' => 'not-a-real-user-id',
+            ]);
+
+        Event::assertNotDispatched(DispatchAgoraCall::class);
+
+        $response->assertStatus(422);
+    }
 }
