@@ -25,9 +25,11 @@ import { mapState } from 'vuex'
 export default {
     name: "AgoraVideoDisplay",
 
-    computed: mapState([
-        'connected'
-    ]),
+    computed: {
+        ...mapState([
+            'connected'
+        ]),
+    },
 }
 </script>
 

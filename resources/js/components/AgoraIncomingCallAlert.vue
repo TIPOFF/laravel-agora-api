@@ -4,11 +4,11 @@
             <p>Incoming call from: {{ incomingCaller }}</p>
 
             <div class="btn-group" role="group">
-                <button @click="acceptCall">
+                <button class="agora-btn-accept" @click="acceptCall">
                     Accept
                 </button>
 
-                <button @click="declineCall">
+                <button class="agora-btn-decline" @click="declineCall">
                     Decline
                 </button>
             </div>
@@ -22,9 +22,11 @@ import { mapState } from 'vuex'
 export default {
     name: "AgoraIncomingCallAlert",
 
-    computed: mapState([
-        'callIncoming'
-    ]),
+    computed: {
+        ...mapState([
+            'callIncoming'
+        ]),
+    },
 }
 </script>
 
