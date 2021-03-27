@@ -30,7 +30,7 @@ AGORA_APP_CERTIFICATE={certificate-obtained-from-Agora}
 
 ## Installing Optional Frontend Vue Resources
 
-Comes with a set of optional Vue components (Not required to use the server side functionality.)
+This package comes with a set of Vue components that you may use alongside the server-side functionality. **You do not have to use these components to use the server-side calls.** However, if you wish to use them, follow these steps to install and configure them in your application:
 
 ### Publish the Javascript Assets:
 
@@ -39,32 +39,104 @@ You may publish the assets with the following command:
 php artisan vendor:publish --tag=agora-js
 ```
 
- - Enable Laravel Echo
- - Register components
- - Register Vuex module (Note that using a module means that they can tap into the data in custom components as well.)
- - Enable Echo
- - Run Laravel Mix
-
-
 ### Install JS Dependencies via NPM
 
 ```
-npm install vue vuex agora-rtc-sdk laravel-echo pusher-js
+npm install vue vuex agora-rtc-sdk laravel-echo
+```
+
+### Import and Initialize Vue and Vuex
+
+Inside your `resources/js/app.js` file, add the code from the following sections:
+
+```
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
+
+const app = new Vue({
+    el: '#app'
+});
 ```
 
 ### Register the Vue Components
-
-
+```
+import AgoraVideoDisplay from './vendor/laravel-agora-api/components/AgoraVideoDisplay.vue';
+import AgoraUserList from './vendor/laravel-agora-api/components/AgoraUserList.vue';
+import AgoraIncomingCallAlert from './vendor/laravel-agora-api/components/AgoraIncomingCallAlert.vue';
+...
+Vue.component('agora-video-display', AgoraVideoDisplay);
+Vue.component('agora-user-list', AgoraUserList);
+Vue.component('agora-incoming-call-alert', AgoraIncomingCallAlert);
+```
 
 ### Register the Vuex Module
 
+This package uses a Vuex module to store and mutate state related to its functionality. This gives you access to the state in any other components you may register if necessary.
 
+```
+import LaravelAgoraModule from './vendor/laravel-agora-api/modules/LaravelAgoraModule';
+...
+const store = new Vuex.Store({
+    modules: {
+        agora: LaravelAgoraModule
+    }
+})
+```
+
+Add the Vuex store to the `Vue` instance like so:
+
+```
+const app = new Vue({
+    el: '#app',
+    store: store
+});
+```
+
+### Finishing Up Asset Registration
+
+When you are finished adjusting your `app.js` file, it should look similar to this:
+
+```
+import Vue from 'vue';
+import Vuex from 'vuex';
+import LaravelAgoraModule from './vendor/laravel-agora-api/modules/LaravelAgoraModule';
+import AgoraVideoDisplay from './vendor/laravel-agora-api/components/AgoraVideoDisplay.vue';
+import AgoraUserList from './vendor/laravel-agora-api/components/AgoraUserList.vue';
+import AgoraIncomingCallAlert from './vendor/laravel-agora-api/components/AgoraIncomingCallAlert.vue';
+
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+    modules: {
+        agora: LaravelAgoraModule
+    }
+})
+
+Vue.component('agora-video-display', AgoraVideoDisplay);
+Vue.component('agora-user-list', AgoraUserList);
+Vue.component('agora-incoming-call-alert', AgoraIncomingCallAlert);
+
+const app = new Vue({
+    el: '#app',
+    store: store
+});
+```
 
 ### Set Up Broadcasting and Laravel Echo
 
-Set up broadcasting in your Laravel app as per the docs.
+Set up broadcasting for your application as detailed in the Laravel documentation at: `https://laravel.com/docs/broadcasting`.
 
-Uncomment Echo in `resources/js/bootstrap.js`
+### Transpile and Place Assets
+
+Run `npm run dev` to transpile the assets. You may now use the Vue components within your Vue app like so:
+
+```
+<agora-video-display></agora-video-display>
+<agora-user-list></agora-user-list>
+<agora-incoming-call-alert></agora-incoming-call-alert>
+```
 
 ### Updating Package Resources
 
