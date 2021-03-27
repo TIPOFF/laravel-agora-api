@@ -32,29 +32,32 @@ AGORA_APP_CERTIFICATE={certificate-obtained-from-Agora}
 
 Comes with a set of optional Vue components (Not required to use the server side functionality.)
 
-Publish the included Javascript assets:
+### Publish the Javascript Assets:
 
-You may publish the config file with the following command:
+You may publish the assets with the following command:
 ```bash
 php artisan vendor:publish --tag=agora-js
 ```
 
  - Enable Laravel Echo
- - Install Vue and Vuex
- - Publish assets
  - Register components
  - Register Vuex module (Note that using a module means that they can tap into the data in custom components as well.)
  - Enable Echo
  - Run Laravel Mix
 
 
-### Install NPM Dependencies
+### Install JS Dependencies via NPM
 
 ```
-npm i agora-rtc-sdk
+npm install vue vuex agora-rtc-sdk
 ```
 
-### Publish and Register the Vue component
+### Register the Vue Components
+
+
+
+### Register the Vuex Module
+
 
 
 ### Set Up Broadcasting and Laravel Echo
