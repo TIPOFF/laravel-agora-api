@@ -3,17 +3,17 @@
         <div id="local-video"></div>
         <div id="remote-video"></div>
 
-        <div class="call-actions">
-            <button type="button" @click="toggleAudio">
-                {{ sendAudio ? "Mute" : "Unmute" }}
+        <div class="agora-call-actions">
+            <button class="agora-btn-toggle-audio" @click="toggleAudio">
+                {{ transmitAudio ? "Mute" : "Unmute" }}
             </button>
 
-            <button type="button" @click="toggleVideo">
-                {{ sendVideo ? "Hide Video" : "Show Video" }}
+            <button class="agora-btn-toggle-video" @click="toggleVideo">
+                {{ transmitVideo ? "Hide Video" : "Show Video" }}
             </button>
 
-            <button type="button" @click="endCall">
-                End Call
+            <button class="agora-btn-hang-up" @click="hangUp">
+                Hang Up
             </button>
         </div>
     </div>
@@ -27,7 +27,9 @@ export default {
 
     computed: {
         ...mapState([
-            'connected'
+            'connected',
+            'transmitAudio',
+            'transmitVideo',
         ]),
     },
 }

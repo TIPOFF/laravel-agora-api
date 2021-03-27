@@ -4,6 +4,10 @@ export default {
     state: () => ({
         connected: false,
         callIncoming: false,
+        transmitAudio: false,
+        transmitVideo: false,
+
+        incomingCaller: null,
     }),
 
     mutations: {},

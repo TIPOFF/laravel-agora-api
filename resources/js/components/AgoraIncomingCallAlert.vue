@@ -24,7 +24,8 @@ export default {
 
     computed: {
         ...mapState([
-            'callIncoming'
+            'callIncoming',
+            'incomingCaller',
         ]),
     },
 }
