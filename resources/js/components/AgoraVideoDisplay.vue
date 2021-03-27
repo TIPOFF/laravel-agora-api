@@ -20,8 +20,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     name: "AgoraVideoDisplay",
+
+    computed: mapState([
+        'connected'
+    ]),
 }
 </script>
 

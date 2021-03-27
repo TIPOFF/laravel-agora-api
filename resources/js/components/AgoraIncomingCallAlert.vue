@@ -17,8 +17,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     name: "AgoraIncomingCallAlert",
+
+    computed: mapState([
+        'callIncoming'
+    ]),
 }
 </script>
 
