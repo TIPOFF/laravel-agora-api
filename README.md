@@ -1,10 +1,10 @@
-# Laravel Package for wrapper of Agora API
+# Laravel Agora Videoconferencing
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/tipoff/laravel-agora-api.svg?style=flat-square)](https://packagist.org/packages/tipoff/laravel-agora-api)
 ![Tests](https://github.com/tipoff/laravel-agora-api/workflows/Tests/badge.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/tipoff/laravel-agora-api.svg?style=flat-square)](https://packagist.org/packages/tipoff/laravel-agora-api)
 
-This is where your description should go. (API wrapper + video conferencing Vue component)
+This package provides an easy-to-use wrapper for placing video calls via the Agora API in the Laravel framework. The server-side implementation can be used with any Javascript framework (or none at all!), but this package also contains a set of ready-to-use Vue components that can be used for the client-side implementation.
 
 ## Installation
 
@@ -26,6 +26,20 @@ Add the following variables to your `.env` file. (Additional config variables ar
 ```
 AGORA_APP_ID={id-obtained-from-Agora}
 AGORA_APP_CERTIFICATE={certificate-obtained-from-Agora}
+```
+
+## Server-side Usage
+
+Retrieving an Agora token: 
+
+```
+/agora/retrieve-token
+```
+
+Placing a call (dispatches an event to start the call):
+
+```
+/agora/place-call
 ```
 
 ## Installing Optional Frontend Vue Resources
