@@ -49,7 +49,7 @@ php artisan vendor:publish --tag=agora-js
 ### Install JS Dependencies via NPM
 
 ```
-npm install vue vuex agora-rtc-sdk
+npm install vue vuex agora-rtc-sdk laravel-echo pusher-js
 ```
 
 ### Register the Vue Components
