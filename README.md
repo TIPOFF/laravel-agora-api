@@ -67,16 +67,6 @@ Uncomment Echo in `resources/js/bootstrap.js`
 
 After updating to a newer package version, use `php artisan vendor:publish --tag=agora-js --force` to make sure that updates to package resources are republished to your application's `resources` directory.
 
-## Testing
-
-```bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
 ## Contributing
 
 Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
