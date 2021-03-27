@@ -28,10 +28,16 @@ AGORA_APP_ID={id-obtained-from-Agora}
 AGORA_APP_CERTIFICATE={certificate-obtained-from-Agora}
 ```
 
+## Installing Optional Frontend Vue Resources
 
-## Optional Frontend Vue Resources
+Comes with a set of optional Vue components (Not required to use the server side functionality.)
 
-Comes with a set of optional Vue components (Not required to use the server side functionality.) (Write up instructions from this bullet list:)
+Publish the included Javascript assets:
+
+You may publish the config file with the following command:
+```bash
+php artisan vendor:publish --tag=agora-js
+```
 
  - Enable Laravel Echo
  - Install Vue and Vuex
@@ -59,7 +65,7 @@ Uncomment Echo in `resources/js/bootstrap.js`
 
 ### Updating Package Resources
 
-After updating to a newer package versuion, use `php artisan vendor:publish --tag=public --force` to make sure that updates to package resources are republished to your application's `public` directory.
+After updating to a newer package version, use `php artisan vendor:publish --tag=agora-js --force` to make sure that updates to package resources are republished to your application's `resources` directory.
 
 ## Testing
 
