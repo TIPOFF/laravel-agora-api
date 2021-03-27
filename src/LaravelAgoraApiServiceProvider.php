@@ -16,7 +16,7 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
     {
         $package
             ->name('agora')
-            ->hasConfigFile()
+            ->hasConfigFile('agora')
             ->hasAssets();
     }
 
@@ -32,6 +32,10 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
         $router->aliasMiddleware('has-agora-permission', AuthorizeAgoraActions::class);
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        $this->publishes([
+            __DIR__.'/../config/agora.php' => config_path('agora.php')
+        ], 'agora-config');
     }
 
     protected function routeConfiguration()
