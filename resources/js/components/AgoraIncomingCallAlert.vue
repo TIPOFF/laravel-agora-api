@@ -24,6 +24,7 @@ export default {
 
     computed: {
         ...mapState([
+            'agoraClient',
             'callIncoming',
             'incomingCaller',
         ]),
