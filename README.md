@@ -147,8 +147,15 @@ Set up broadcasting for your application as detailed in the Laravel documentatio
 Run `npm run dev` to transpile the assets. You may now use the Vue components within your Vue app like so:
 
 ```
-<agora-video-display></agora-video-display>
+<agora-video-display
+    currentUserId="{{ Auth::id() }}"
+    currentUserName="{{ Auth::user()->name }}"
+    echoChannelName="{{ config('agora.channel_name') }}"
+    agoraRoutePrefix="{{ config('agora.routes.prefix') }}"
+></agora-video-display>
+
 <agora-user-list></agora-user-list>
+
 <agora-incoming-call-alert></agora-incoming-call-alert>
 ```
 

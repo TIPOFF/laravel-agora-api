@@ -26,14 +26,21 @@ export default {
     name: "AgoraVideoDisplay",
 
     props: [
-        'channelName',
+        'currentUserId',
+        'currentUserName',
+        'echoChannelName',
         'agoraRoutePrefix',
     ],
 
     mounted() {
+        let currentUser = {};
+        currentUser.id = this.currentUserId;
+        currentUser.name = this.currentUserName;
+
+        this.setCurrentUser(currentUser)
         this.setAgoraRoutePrefix(this.agoraRoutePrefix);
 
-        this.setEchoChannelName(this.channelName);
+        this.setEchoChannelName(this.echoChannelName);
         this.joinEchoChannel();
 
         this.setEchoChannelUserListeners();
@@ -41,6 +48,7 @@ export default {
 
     methods: {
         ...mapMutations([
+            'setCurrentUser',
             'initializeAgoraClient',
             'setAgoraRoutePrefix',
             'setEchoChannelName',

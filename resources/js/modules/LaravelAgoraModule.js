@@ -2,6 +2,11 @@ export default {
     namespaced: true,
 
     state: () => ({
+        currentUser: {
+            id: null,
+            name: null,
+        },
+
         agoraClient: null,
 
         agoraRoutePrefix: '',
@@ -23,6 +28,11 @@ export default {
     }),
 
     mutations: {
+        setCurrentUser (state, user) {
+            state.currentUser.id = user.id;
+            state.currentUser.name = user.name;
+        },
+
         initializeAgoraClient (state, agoraId) {
             state.agoraClient = AgoraRTC.createClient({
                 mode: "rtc",
@@ -76,7 +86,7 @@ export default {
             });
 
             state.echoChannel.listen("DispatchAgoraCall", ({ data }) => {
-                if (parseInt(data.recipientId) === parseInt(this.authuserid)) {
+                if (parseInt(data.recipientId) === parseInt(state.currentUser.id)) {
                     let callerIndex = this.onlineUsers.findIndex((user) => {
                         user.id === data.senderId
                     });
