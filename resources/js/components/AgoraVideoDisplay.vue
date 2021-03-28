@@ -31,10 +31,12 @@ export default {
     ],
 
     mounted() {
-        store.commit('setAgoraRoutePrefix', this.agoraRoutePrefix);
+        this.setAgoraRoutePrefix(this.agoraRoutePrefix);
 
-        store.commit('setEchoChannelName', this.channelName);
-        store.commit('joinEchoChannel');
+        this.setEchoChannelName(this.channelName);
+        this.joinEchoChannel();
+
+        this.setEchoChannelUserListeners();
     },
 
     methods: {
