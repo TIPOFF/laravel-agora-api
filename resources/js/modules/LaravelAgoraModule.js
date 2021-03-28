@@ -7,17 +7,19 @@ export default {
         agoraRoutePrefix: '',
 
         connected: false,
+
         callIncoming: false,
+        incomingCaller: null,
 
         transmitAudio: false,
         transmitVideo: false,
-
-        incomingCaller: null,
 
         activeUsers: [],
 
         echoChannelName: '',
         echoChannel: null,
+
+        agoraChannelName: '',
     }),
 
     mutations: {
@@ -71,6 +73,19 @@ export default {
                 });
 
                 state.activeUsers.splice(usersIndex, 1);
+            });
+
+            state.echoChannel.listen("DispatchAgoraCall", ({ data }) => {
+                if (parseInt(data.recipientId) === parseInt(this.authuserid)) {
+                    let callerIndex = this.onlineUsers.findIndex((user) => {
+                        user.id === data.senderId
+                    });
+
+                    state.incomingCaller = this.onlineUsers[callerIndex]["name"];
+                    state.callIncoming = true;
+
+                    state.agoraChannelName = data.agoraChannel;
+                }
             });
         },
     },
