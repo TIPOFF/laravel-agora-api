@@ -87,7 +87,7 @@ Vue.component('agora-incoming-call-alert', AgoraIncomingCallAlert);
 
 ### Register the Vuex Module
 
-This package uses a Vuex module to store and mutate state related to its functionality. This gives you access to the state in any other components you may register if necessary.
+This package uses a Vuex module to store and mutate state related to its functionality. This gives you access to the state in any other components you may register if necessary (for instance, to open a modal when a call is incoming).
 
 ```
 import LaravelAgoraModule from './vendor/laravel-agora-api/modules/LaravelAgoraModule';
