@@ -16,7 +16,7 @@ export default {
 
         activeUsers: [],
 
-        channelName: '',
+        echoChannelName: '',
         echoChannel: null,
     }),
 
@@ -43,11 +43,35 @@ export default {
         },
 
         setEchoChannelName(state, name) {
-            state.channelName = name;
+            state.echoChannelName = name;
         },
 
         joinEchoChannel(state) {
-            state.echoChannel = window.Echo.join(state.channelName);
+            state.echoChannel = window.Echo.join(state.echoChannelName);
+        },
+
+        setEchoChannelUserListeners(state) {
+            state.echoChannel.here((users) => {
+                state.activeUsers = users;
+            });
+
+            state.echoChannel.joining((user) => {
+                let usersIndex = state.activeUsers.findIndex((data) => {
+                    data.id === user.id;
+                });
+
+                if (usersIndex === -1) {
+                    state.activeUsers.push(user);
+                }
+            });
+
+            state.echoChannel.leaving((user) => {
+                let usersIndex = state.activeUsers.findIndex((data) => {
+                    data.id === user.id;
+                });
+
+                state.activeUsers.splice(usersIndex, 1);
+            });
         },
     },
 
