@@ -13,6 +13,9 @@ export default {
         incomingCaller: null,
 
         activeUsers: [],
+
+        channelName: '',
+        echoChannel: null,
     }),
 
     mutations: {
@@ -31,6 +34,14 @@ export default {
                     console.log("Failed to initialize AgoraRTC client.", err);
                 }
             );
+        },
+
+        setChannelName(state, name) {
+            state.channelName = name;
+        },
+
+        joinEchoChannel(state) {
+            state.echoChannel = window.Echo.join(state.channelName);
         },
     },
 

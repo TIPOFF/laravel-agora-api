@@ -25,6 +25,15 @@ import { mapState } from 'vuex'
 export default {
     name: "AgoraVideoDisplay",
 
+    props: [
+        'channelName'
+    ],
+
+    mounted() {
+        store.commit('setChannelName', this.channelName);
+        store.commit('joinEchoChannel');
+    },
+
     computed: {
         ...mapState([
             'agoraClient',
