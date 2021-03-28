@@ -16,12 +16,12 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "tipoff/authorization": "^2.7.0",
-        "tipoff/support": "^1.8.7"
+        "tipoff/authorization": "^2.7.1",
+        "tipoff/support": "^1.8.8"
     },
     "require-dev": {
         "psalm/plugin-laravel": "^1.4",
-        "tipoff/test-support": "^1.4.0"
+        "tipoff/test-support": "^1.4.1"
     },
     "autoload": {
         "psr-4": {
