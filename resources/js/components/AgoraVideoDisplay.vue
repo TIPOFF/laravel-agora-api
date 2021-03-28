@@ -30,6 +30,7 @@ export default {
         'currentUserName',
         'echoChannelName',
         'agoraRoutePrefix',
+        'agoraAppId',
     ],
 
     mounted() {

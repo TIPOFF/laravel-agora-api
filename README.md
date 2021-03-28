@@ -144,7 +144,7 @@ Set up broadcasting for your application as detailed in the Laravel documentatio
 
 ### Transpile and Place Assets
 
-Run `npm run dev` to transpile the assets. You may now use the Vue components within your Vue app like so:
+Run `npm run dev` to transpile the assets. You may now use the Vue components within your app like so:
 
 ```
 <agora-video-display
@@ -152,6 +152,7 @@ Run `npm run dev` to transpile the assets. You may now use the Vue components wi
     current-user-name="{{ Auth::user()->name }}"
     echo-channel-name="{{ config('agora.channel_name') }}"
     agora-route-prefix="{{ config('agora.routes.prefix') }}"
+    agora-app-id="{{ config('agora.credentials.app_id') }}"
 ></agora-video-display>
 
 <agora-user-list></agora-user-list>
