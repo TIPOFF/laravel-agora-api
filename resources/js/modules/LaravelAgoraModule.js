@@ -4,6 +4,8 @@ export default {
     state: () => ({
         agoraClient: null,
 
+        agoraRoutePrefix: '',
+
         connected: false,
         callIncoming: false,
 
@@ -36,7 +38,11 @@ export default {
             );
         },
 
-        setChannelName(state, name) {
+        setAgoraRoutePrefix(state, prefix) {
+            state.agoraRoutePrefix = prefix;
+        },
+
+        setEchoChannelName(state, name) {
             state.channelName = name;
         },
 

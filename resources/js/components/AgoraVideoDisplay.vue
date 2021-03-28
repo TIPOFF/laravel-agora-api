@@ -20,18 +20,31 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
     name: "AgoraVideoDisplay",
 
     props: [
-        'channelName'
+        'channelName',
+        'agoraRoutePrefix',
     ],
 
     mounted() {
-        store.commit('setChannelName', this.channelName);
+        store.commit('setAgoraRoutePrefix', this.agoraRoutePrefix);
+
+        store.commit('setEchoChannelName', this.channelName);
         store.commit('joinEchoChannel');
+    },
+
+    methods: {
+        ...mapMutations([
+            'initializeAgoraClient',
+            'setAgoraRoutePrefix',
+            'setEchoChannelName',
+            'joinEchoChannel',
+            'setEchoChannelUserListeners',
+        ]),
     },
 
     computed: {
