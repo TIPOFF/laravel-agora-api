@@ -43,7 +43,7 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
             __DIR__.'/../resources/js' => resource_path('js/vendor/laravel-agora-api'),
         ], 'agora-js');
 
-        Gate::define('access-agora', function($user) {
+        Gate::define('access-agora', function ($user) {
             return Auth::check();
         });
     }
