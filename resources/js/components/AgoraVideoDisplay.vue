@@ -34,7 +34,6 @@ export default {
     ],
 
     mounted() {
-        console.log(this.$store);
         let currentUser = {};
         currentUser.id = this.currentUserId;
         currentUser.name = this.currentUserName;

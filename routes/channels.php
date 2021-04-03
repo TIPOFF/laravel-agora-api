@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Gate;
 use Tipoff\LaravelAgoraApi\Services\DisplayNameService;
 
 Broadcast::channel(config('agora.channel_name'), function ($user) {
-    if (Auth::check() && $user->hasPermissionTo('make video call')) {
+    if (Gate::allows('access-agora')) {
         return [
-            'id' => Auth::id(),
-            'name' => DisplayNameService::getDisplayName(Auth::user())
+            'id' => $user->id,
+            'name' => DisplayNameService::getDisplayName($user)
         ];
     } else {
         return false;

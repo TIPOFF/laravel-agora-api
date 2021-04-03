@@ -29,22 +29,6 @@ class AgoraControllerTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function testUnauthorizedUsersCannotRetrieveAToken()
-    {
-        $response = $this->actingAs(User::factory()->create())
-            ->postJson(route('agora.retrieve-token'));
-
-        $response->assertStatus(403);
-    }
-
-    public function testUnauthorizedUsersCannotPlaceACall()
-    {
-        $response = $this->actingAs(User::factory()->create())
-            ->postJson(route('agora.place-call'));
-
-        $response->assertStatus(403);
-    }
-
     public function testInvalidRequestsDoNotReturnAToken()
     {
         $response = $this->actingAs(self::createPermissionedUser('make video call', true))

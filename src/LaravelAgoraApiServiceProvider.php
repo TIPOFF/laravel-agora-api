@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tipoff\LaravelAgoraApi;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Tipoff\LaravelAgoraApi\Http\Middleware\AuthorizeAgoraActions;
 use Tipoff\Support\TipoffPackage;
@@ -40,6 +42,10 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
         $this->publishes([
             __DIR__.'/../resources/js' => resource_path('js/vendor/laravel-agora-api'),
         ], 'agora-js');
+
+        Gate::define('access-agora', function($user) {
+            return Auth::check();
+        });
     }
 
     protected function routeConfiguration()

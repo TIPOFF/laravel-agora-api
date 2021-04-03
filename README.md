@@ -144,6 +144,8 @@ const app = new Vue({
 
 Set up broadcasting for your application as detailed in the Laravel documentation at: `https://laravel.com/docs/broadcasting`.
 
+**Note: Don't forget to uncomment `App\Providers\BroadcastServiceProvider::class` in your `app.php` configuration file.**
+
 ### Transpile and Place Assets
 
 Run `npm run dev` to transpile the assets. You may now use the Vue components within your app like so:
