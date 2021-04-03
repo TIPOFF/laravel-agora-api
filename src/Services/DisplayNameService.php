@@ -4,7 +4,7 @@ namespace Tipoff\LaravelAgoraApi\Services;
 
 use Exception;
 
-class UsernameService
+class DisplayNameService
 {
     public static function getUsername($user) {
         $pieces = [];
@@ -13,7 +13,7 @@ class UsernameService
             if (isset($user->{$field})) {
                 $pieces[] = $user->{$field};
             } else {
-                throw new Exception('Nonexistent object property specified in username generation configuration.');
+                throw new Exception("Nonexistent object property: {$field} specified in username generation configuration.");
             }
         }
 

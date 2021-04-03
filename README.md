@@ -28,7 +28,7 @@ AGORA_APP_ID={id-obtained-from-Agora}
 AGORA_APP_CERTIFICATE={certificate-obtained-from-Agora}
 ```
 
-If necessary, publish the configuration file and customize the fields used to generate a user's display name by changing the `user_display_name.fields` and `user_display_name,separator` fields.
+If necessary, publish the configuration file and customize the fields used to generate a user's display name by changing the `user_display_name.fields` and `user_display_name.separator` fields.
 
 ## Server-side Usage
 

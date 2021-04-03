@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tipoff\LaravelAgoraApi\AgoraDynamicKey\RtcTokenBuilder;
 use Tipoff\LaravelAgoraApi\Events\DispatchAgoraCall;
+use Tipoff\LaravelAgoraApi\Services\DisplayNameService;
 
 class AgoraController extends Controller
 {
@@ -21,7 +22,7 @@ class AgoraController extends Controller
                 config('agora.credentials.app_id'),
                 config('agora.credentials.certificate'),
                 $request->input('channel_name'),
-                Auth::user()->name,
+                DisplayNameService::getUsername(Auth::user()),
                 0, // RtcTokenBuilder::RoleAttendee is throwing an `Undefined constant` error for some reason. Leaving this for now.
                 now()->getTimestamp() + 3600
             ),
