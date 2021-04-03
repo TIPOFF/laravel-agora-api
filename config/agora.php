@@ -15,4 +15,11 @@ return [
     ],
 
     'channel_name' => env('AGORA_CHANNEL_NAME', 'agora-channel'),
+
+    'user_name' => [
+        'fields' => [
+            'name',
+        ],
+        'separator' => ' '
+    ]
 ];
