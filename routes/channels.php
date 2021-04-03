@@ -8,7 +8,7 @@ Broadcast::channel(config('agora.channel_name'), function ($user) {
     if (Auth::check() && $user->hasPermissionTo('make video call')) {
         return [
             'id' => Auth::id(),
-            'name' => DisplayNameService::getUsername(Auth::user())
+            'name' => DisplayNameService::getDisplayName(Auth::user())
         ];
     } else {
         return false;
