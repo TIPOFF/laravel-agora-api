@@ -34,11 +34,12 @@ export default {
     ],
 
     mounted() {
+        console.log(this.$store);
         let currentUser = {};
         currentUser.id = this.currentUserId;
         currentUser.name = this.currentUserName;
 
-        this.setCurrentUser(currentUser)
+        this.setCurrentUser(currentUser);
         this.setAgoraRoutePrefix(this.agoraRoutePrefix);
 
         this.setEchoChannelName(this.echoChannelName);
@@ -48,14 +49,14 @@ export default {
     },
 
     methods: {
-        ...mapMutations([
-            'setCurrentUser',
-            'initializeAgoraClient',
-            'setAgoraRoutePrefix',
-            'setEchoChannelName',
-            'joinEchoChannel',
-            'setEchoChannelUserListeners',
-        ]),
+        ...mapMutations({
+            setCurrentUser: 'agora/setCurrentUser',
+            initializeAgoraClient: 'agora/initializeAgoraClient',
+            setAgoraRoutePrefix: 'agora/setAgoraRoutePrefix',
+            setEchoChannelName: 'agora/setEchoChannelName',
+            joinEchoChannel: 'agora/joinEchoChannel',
+            setEchoChannelUserListeners: 'agora/setEchoChannelUserListeners',
+        }),
     },
 
     computed: {
