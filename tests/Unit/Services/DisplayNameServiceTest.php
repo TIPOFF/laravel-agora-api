@@ -10,7 +10,8 @@ use Tipoff\LaravelAgoraApi\Tests\TestCase;
 
 class AgoraControllerTest extends TestCase
 {
-    public function testExceptionThrownOnNonexistantFieldName() {
+    public function testExceptionThrownOnNonexistantFieldName()
+    {
         $user = new stdClass();
 
         $this->expectException(Exception::class);
@@ -20,7 +21,8 @@ class AgoraControllerTest extends TestCase
         DisplayNameService::getDisplayName($user);
     }
 
-    public function testGenerateDisplayNameFromSingleField() {
+    public function testGenerateDisplayNameFromSingleField()
+    {
         $user = new stdClass();
         $user->name = 'John';
 
@@ -29,10 +31,11 @@ class AgoraControllerTest extends TestCase
         $this->assertEquals($user->name, $displayName);
     }
 
-    public function testGenerateDisplayNameFromMultipleFields() {
+    public function testGenerateDisplayNameFromMultipleFields()
+    {
         Config::set('agora.user_display_name.fields', [
             'first_name',
-            'last_name'
+            'last_name',
         ]);
 
         $user = new stdClass();
