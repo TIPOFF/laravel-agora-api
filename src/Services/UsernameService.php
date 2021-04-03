@@ -9,7 +9,7 @@ class UsernameService
     public static function getUsername($user) {
         $pieces = [];
 
-        foreach (config('agora.user_name.fields') as $field) {
+        foreach (config('agora.user_display_name.fields') as $field) {
             if (isset($user->{$field})) {
                 $pieces[] = $user->{$field};
             } else {
@@ -18,7 +18,7 @@ class UsernameService
         }
 
         return implode(
-            config('agora.user_name.separator'),
+            config('agora.user_display_name.separator'),
             $pieces
         );
     }
