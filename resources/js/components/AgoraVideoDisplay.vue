@@ -16,6 +16,11 @@
                 Hang Up
             </button>
         </div>
+
+        <div>
+            {{ transmitAudio }}
+            {{ transmitVideo }}
+        </div>
     </div>
 </template>
 
