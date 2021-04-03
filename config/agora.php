@@ -18,8 +18,7 @@ return [
 
     'user_display_name' => [
         'fields' => [
-            'first_name',
-            'last_name',
+            'name',
         ],
         'separator' => ' '
     ]
