@@ -6,7 +6,8 @@ use Exception;
 
 class UsernameService
 {
-    public static function getUsername($user) {
+    public static function getUsername($user)
+    {
         $pieces = [];
 
         foreach (config('agora.user_display_name.fields') as $field) {
