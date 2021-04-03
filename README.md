@@ -30,6 +30,14 @@ AGORA_APP_CERTIFICATE={certificate-obtained-from-Agora}
 
 If necessary, publish the configuration file and customize the fields used to generate a user's display name by changing the `user_display_name.fields` and `user_display_name.separator` fields.
 
+Be default, any authenticated user can place a call. If you wish to change this, publish the package service provider and update the gate that controls access to Agora:
+
+```
+Gate::define('access-agora', function($user) {
+    return Auth::check(); // Change this to whatever check you desire.
+});
+```
+
 ## Server-side Usage
 
 Retrieving an Agora token: 
