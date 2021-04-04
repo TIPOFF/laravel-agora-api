@@ -1,5 +1,5 @@
 <template>
-    <div id="video-container" v-if="connected">
+    <div id="video-container" v-if="callConnected">
         <div id="local-video"></div>
         <div id="remote-video"></div>
 
@@ -45,6 +45,7 @@ export default {
 
         this.setCurrentUser(currentUser);
         this.setAgoraRoutePrefix(this.agoraRoutePrefix);
+        this.setAgoraAppID(this.agoraAppId);
 
         this.setEchoChannelName(this.echoChannelName);
         this.joinEchoChannel();
@@ -56,6 +57,7 @@ export default {
         ...mapMutations({
             setCurrentUser: 'agora/setCurrentUser',
             initializeAgoraClient: 'agora/initializeAgoraClient',
+            setAgoraAppID: 'agora/setAgoraAppID',
             setAgoraRoutePrefix: 'agora/setAgoraRoutePrefix',
             setEchoChannelName: 'agora/setEchoChannelName',
             joinEchoChannel: 'agora/joinEchoChannel',
@@ -65,8 +67,7 @@ export default {
 
     computed: {
         ...mapState([
-            'agoraClient',
-            'connected',
+            'callConnected',
             'transmitAudio',
             'transmitVideo',
         ]),

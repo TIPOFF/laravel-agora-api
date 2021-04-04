@@ -24,11 +24,20 @@ export default {
 
     computed: {
         ...mapState([
-            'agoraClient',
             'callIsIncoming',
             'incomingCaller',
         ]),
     },
+
+    methods: {
+        acceptCall: function() {
+            console.log('Call accepted.');
+        },
+        
+        declineCall: function() {
+            console.log('Call declined.');
+        }
+    }
 }
 </script>
 

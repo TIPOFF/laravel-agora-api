@@ -1,4 +1,5 @@
 import axios from 'axios';
+import AgoraRTC from 'agora-rtc-sdk';
 
 export default {
     namespaced: true,
@@ -12,12 +13,11 @@ export default {
         agoraClient: null,
 
         agoraRoutePrefix: '',
-
-        connected: false,
+        agoraAppID: null,
 
         callIsIncoming: false,
         incomingCaller: null,
-        callIsActive: false,
+        callConnected: false,
 
         stream: null,
 
@@ -39,19 +39,24 @@ export default {
             state.currentUser.name = user.name;
         },
 
-        initializeAgoraClient (state, agoraId) {
+        setAgoraAppID (state, id) {
+            state.agoraAppID = id;
+        },
+
+        initializeAgoraClient (state) {
             state.agoraClient = AgoraRTC.createClient({
                 mode: "rtc",
                 codec: "h264"
             });
 
             state.agoraClient.init(
-                agoraId,
+                state.agoraAppID,
                 () => {
                     console.log("Successfully initialized AgoraRTC client.");
                 },
                 (err) => {
-                    console.log("Failed to initialize AgoraRTC client.", err);
+                    console.log("Failed to initialize AgoraRTC client.");
+                    console.log(err);
                 }
             );
         },
@@ -91,25 +96,47 @@ export default {
                 state.activeUsers.splice(usersIndex, 1);
             });
 
-            state.echoChannel.listen("DispatchAgoraCall", ({ data }) => {
+            state.echoChannel.listen("Tipoff\LaravelAgoraApi\Events\DispatchAgoraCall", ({ data }) => {
+                console.log('Incoming call...');
                 if (parseInt(data.recipientId) === parseInt(state.currentUser.id)) {
-                    let callerIndex = this.onlineUsers.findIndex((user) => {
-                        user.id === data.senderId
-                    });
+                    // let callerIndex = state.activeUsers.findIndex((user) => {
+                    //     user.id === data.senderId
+                    // });
 
-                    state.incomingCaller = this.onlineUsers[callerIndex]["name"];
+                    // state.incomingCaller = state.activeUsers[callerIndex]["name"];
+                    state.incomingCaller = data.senderDisplayName;
                     state.callIsIncoming = true;
 
                     state.agoraChannelName = data.agoraChannel;
                 }
             });
         },
+
+        joinRoom({commit, state}, {token, channel}) {
+            console.log('Joining Agora room...');
+            console.log(state);
+            state.agoraClient.join(
+                token,
+                channel,
+                state.currentUser.name,
+                (uid) => {
+                    console.log(`User ${uid} joined Agora channel successfully.`);
+                    state.callConnected = true;
+
+                    // commit('createLocalStream');
+                    // commit('initializeAgoraListeners');
+                },
+                (err) => {
+                    console.log("Failed to join channel.");
+                    console.log(err);
+                }
+            );
+        },
     },
 
     actions: {        
-        async makeCall({commit, state}, recipientId) {
+        async makeCall({commit, state, dispatch}, recipientId) {
             try {
-                // channelName = the caller's and the callee's id. you can use anything. tho.
                 const channelName = `${state.currentUser.id}_to_${recipientId}`;
                 const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
                     channel_name: channelName,
@@ -121,8 +148,12 @@ export default {
                     recipient_id: recipientId,
                 });
 
-                // this.initializeAgora();
-                // this.joinRoom(token.data, channelName);
+                commit('initializeAgoraClient');
+
+                commit('joinRoom', {
+                    token: token.data,
+                    channel: channelName
+                });
             } catch (err) {
                 console.log(err);
             }
