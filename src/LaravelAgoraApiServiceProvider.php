@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Tipoff\LaravelAgoraApi;
 
 use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Tipoff\LaravelAgoraApi\Http\Middleware\AuthorizeAgoraActions;
 use Tipoff\Support\TipoffPackage;
