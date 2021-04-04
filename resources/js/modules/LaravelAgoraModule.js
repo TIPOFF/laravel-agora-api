@@ -30,7 +30,6 @@ export default {
         echoChannel: null,
 
         agoraChannelName: '',
-        agoraChannel: null,
     }),
 
     mutations: {
@@ -99,11 +98,6 @@ export default {
             state.echoChannel.listen("Tipoff\LaravelAgoraApi\Events\DispatchAgoraCall", ({ data }) => {
                 console.log('Incoming call...');
                 if (parseInt(data.recipientId) === parseInt(state.currentUser.id)) {
-                    // let callerIndex = state.activeUsers.findIndex((user) => {
-                    //     user.id === data.senderId
-                    // });
-
-                    // state.incomingCaller = state.activeUsers[callerIndex]["name"];
                     state.incomingCaller = data.senderDisplayName;
                     state.callIsIncoming = true;
 
@@ -116,7 +110,7 @@ export default {
     actions: {        
         async makeCall({commit, state, dispatch}, recipientId) {
             try {
-                const channelName = `${state.currentUser.id}_to_${recipientId}`;
+                const channelName = `channel${state.currentUser.id}to${recipientId}`;
                 const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
                     channel_name: channelName,
                 });
@@ -140,13 +134,12 @@ export default {
 
         joinRoom({commit, state, dispatch}, {token, channel}) {
             console.log('Joining Agora room...');
-            console.log(state);
             console.log(token);
             console.log(channel);
             state.agoraClient.join(
                 token,
                 channel,
-                state.currentUser.name,
+                state.currentUser.id,
                 (uid) => {
                     console.log(`User ${uid} joined Agora channel successfully.`);
                     state.callConnected = true;
