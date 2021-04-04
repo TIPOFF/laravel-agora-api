@@ -16,6 +16,7 @@ class DispatchAgoraCall implements ShouldBroadcast
 
     public $agoraChannel;
     public $senderId;
+    public $senderDisplayName;
     public $recipientId;
 
     /**
@@ -23,10 +24,11 @@ class DispatchAgoraCall implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($agoraChannel, $senderId, $recipientId)
+    public function __construct($agoraChannel, $senderId, $senderDisplayName, $recipientId)
     {
         $this->agoraChannel = $agoraChannel;
         $this->senderId = $senderId;
+        $this->senderDisplayName = $senderDisplayName;
         $this->recipientId = $recipientId;
     }
 

@@ -39,6 +39,7 @@ class AgoraController extends Controller
         broadcast(new DispatchAgoraCall(
             $request->input('channel_name'),
             Auth::id(),
+            DisplayNameService::getDisplayName(Auth::user()),
             $request->input('recipient_id')
         ))->toOthers();
     }
