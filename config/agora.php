@@ -9,8 +9,8 @@ return [
     'routes' => [
         'prefix' => env('AGORA_ROUTE_PREFIX', 'agora'),
         'middleware' => [
+            'web',
             'auth',
-            'has-agora-permission'
         ],
     ],
 
