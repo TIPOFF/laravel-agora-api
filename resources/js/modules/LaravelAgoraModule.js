@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export default {
     namespaced: true,
 
@@ -13,8 +15,11 @@ export default {
 
         connected: false,
 
-        callIncoming: false,
+        callIsIncoming: false,
         incomingCaller: null,
+        callIsActive: false,
+
+        stream: null,
 
         transmitAudio: false,
         transmitVideo: false,
@@ -25,6 +30,7 @@ export default {
         echoChannel: null,
 
         agoraChannelName: '',
+        agoraChannel: null,
     }),
 
     mutations: {
@@ -92,7 +98,7 @@ export default {
                     });
 
                     state.incomingCaller = this.onlineUsers[callerIndex]["name"];
-                    state.callIncoming = true;
+                    state.callIsIncoming = true;
 
                     state.agoraChannelName = data.agoraChannel;
                 }
@@ -100,11 +106,26 @@ export default {
         },
     },
 
-    actions: {
-        async makeCall(recipientId) {
-            console.log('Hit!');
-            console.log(recipientId);
-            state.currentUser.name = 'Test!';
+    actions: {        
+        async makeCall({commit, state}, {recipientId}) {
+            try {
+                // channelName = the caller's and the callee's id. you can use anything. tho.
+                const channelName = `${state.currentUser.id}_to_${recipientId}`;
+                const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
+                    channel_name: channelName,
+                });
+
+                // Broadcasts a call event to the callee and also gets back the token
+                await axios.post("/"+ state.agoraRoutePrefix +"/place-call", {
+                    channel_name: channelName,
+                    recipient_id: recipientId,
+                });
+
+                // this.initializeAgora();
+                // this.joinRoom(token.data, channelName);
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 
