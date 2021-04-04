@@ -107,7 +107,7 @@ export default {
     },
 
     actions: {        
-        async makeCall({commit, state}, {recipientId}) {
+        async makeCall({commit, state}, recipientId) {
             try {
                 // channelName = the caller's and the callee's id. you can use anything. tho.
                 const channelName = `${state.currentUser.id}_to_${recipientId}`;
