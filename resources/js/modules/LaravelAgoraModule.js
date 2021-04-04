@@ -111,27 +111,6 @@ export default {
                 }
             });
         },
-
-        joinRoom({commit, state}, {token, channel}) {
-            console.log('Joining Agora room...');
-            console.log(state);
-            state.agoraClient.join(
-                token,
-                channel,
-                state.currentUser.name,
-                (uid) => {
-                    console.log(`User ${uid} joined Agora channel successfully.`);
-                    state.callConnected = true;
-
-                    // commit('createLocalStream');
-                    // commit('initializeAgoraListeners');
-                },
-                (err) => {
-                    console.log("Failed to join channel.");
-                    console.log(err);
-                }
-            );
-        },
     },
 
     actions: {        
@@ -150,13 +129,36 @@ export default {
 
                 commit('initializeAgoraClient');
 
-                commit('joinRoom', {
+                dispatch('joinRoom', {
                     token: token.data,
                     channel: channelName
                 });
             } catch (err) {
                 console.log(err);
             }
+        },
+
+        joinRoom({commit, state, dispatch}, {token, channel}) {
+            console.log('Joining Agora room...');
+            console.log(state);
+            console.log(token);
+            console.log(channel);
+            state.agoraClient.join(
+                token,
+                channel,
+                state.currentUser.name,
+                (uid) => {
+                    console.log(`User ${uid} joined Agora channel successfully.`);
+                    state.callConnected = true;
+
+                    // commit('createLocalStream');
+                    // commit('initializeAgoraListeners');
+                },
+                (err) => {
+                    console.log("Failed to join channel.");
+                    console.log(err);
+                }
+            );
         },
     },
 
