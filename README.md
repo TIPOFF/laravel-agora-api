@@ -153,7 +153,7 @@ Run `npm run dev` to transpile the assets. You may now use the Vue components wi
 ```
 <agora-video-display
     current-user-id="{{ Auth::id() }}"
-    current-user-name="{{ Auth::user()->name }}"
+    current-user-name="{{ \Tipoff\LaravelAgoraApi\Services\DisplayNameService::getDisplayName(Auth::user()) }}"
     echo-channel-name="{{ config('agora.channel_name') }}"
     agora-route-prefix="{{ config('agora.routes.prefix') }}"
     agora-app-id="{{ config('agora.credentials.app_id') }}"
