@@ -63,7 +63,6 @@ export default {
             setAgoraRoutePrefix: 'agora/setAgoraRoutePrefix',
             setEchoChannelName: 'agora/setEchoChannelName',
             joinEchoChannel: 'agora/joinEchoChannel',
-            setEchoChannelUserListeners: 'agora/setEchoChannelUserListeners',
         }),
     },
 
@@ -75,6 +74,7 @@ export default {
         ]),
         ...mapActions('agora', [
             'initializeAudioAndVideoTracks',
+            'setEchoChannelUserListeners',
         ]),
     },
 }

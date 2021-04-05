@@ -78,8 +78,10 @@ export default {
         joinEchoChannel(state) {
             state.echoChannel = window.Echo.join(state.echoChannelName);
         },
+    },
 
-        setEchoChannelUserListeners(state) {
+    actions: {
+        async setEchoChannelUserListeners(state) {
             state.echoChannel.here((users) => {
                 state.activeUsers = users;
             });
@@ -111,20 +113,29 @@ export default {
                     state.callIsIncoming = true;
 
                     state.agoraChannelName = data.agoraChannel;
+
+                    // const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
+                    //     channel_name: state.agoraChannelName,
+                    // });
+
+                    state.rtc.client.setClientRole("audience");
+
+                    const uid = await state.rtc.client.join(
+                        state.agoraAppID,
+                        state.agoraChannelName,
+                        token,
+                        state.currentUser.id
+                    );
+            
+                    dispatch('initializeAudioAndVideoTracks');
                 }
             });
         },
-    },
 
-    actions: {  
         async initializeAudioAndVideoTracks ({commit, state, dispatch}) {
             // state.rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
             // state.rtc.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
             [state.rtc.localAudioTrack, state.rtc.localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
-
-            // I may have to assign the tracks to temp vars and then use mutations to assign them to state.
-            // Mute and unmute mutations?
-            // Or maybe this should all just be in a method on the component.
 
             await state.rtc.client.publish([state.rtc.localAudioTrack, state.rtc.localVideoTrack]);
 
@@ -132,12 +143,14 @@ export default {
         },
 
         async makeCall({commit, state, dispatch}, recipientId) {
+            state.rtc.client.setClientRole("host");
+
             // const channelName = `channel${state.currentUser.id}to${recipientId}`;
             const channelName = 'some-great-channel';
-            const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
-                channel_name: channelName,
-            });
-
+//             const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
+//                 channel_name: channelName,
+//             });
+// console.log(token);
             // Broadcasts a call event to the callee.
             await axios.post("/"+ state.agoraRoutePrefix +"/place-call", {
                 channel_name: channelName,
@@ -176,27 +189,33 @@ export default {
             // }
         },
 
-        joinRoom({commit, state, dispatch}, {token, channel}) {
-            console.log('Joining Agora room...');
-            console.log(token);
-            console.log(channel);
-            state.agoraClient.join(
-                token,
-                channel,
-                state.currentUser.id,
-                (uid) => {
-                    console.log(`User ${uid} joined Agora channel successfully.`);
-                    state.callConnected = true;
+        async joingAgoraChannel({commit, state, dispatch}, {token, channel}) {
 
-                    // commit('createLocalStream');
-                    // commit('initializeAgoraListeners');
-                },
-                (err) => {
-                    console.log("Failed to join channel.");
-                    console.log(err);
-                }
-            );
         },
+
+        // joinRoom({commit, state, dispatch}, {token, channel}) {
+        //     console.log('Joining Agora room...');
+
+
+        //     console.log(token);
+        //     console.log(channel);
+        //     state.agoraClient.join(
+        //         token,
+        //         channel,
+        //         state.currentUser.id,
+        //         (uid) => {
+        //             console.log(`User ${uid} joined Agora channel successfully.`);
+        //             state.callConnected = true;
+
+        //             // commit('createLocalStream');
+        //             // commit('initializeAgoraListeners');
+        //         },
+        //         (err) => {
+        //             console.log("Failed to join channel.");
+        //             console.log(err);
+        //         }
+        //     );
+        // },
     },
 
     getters: {}
