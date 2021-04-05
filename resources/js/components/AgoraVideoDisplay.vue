@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
     name: "AgoraVideoDisplay",
@@ -51,6 +51,8 @@ export default {
         this.joinEchoChannel();
 
         this.setEchoChannelUserListeners();
+
+        this.initializeAgoraClient();
     },
 
     methods: {
@@ -70,6 +72,9 @@ export default {
             'callConnected',
             'transmitAudio',
             'transmitVideo',
+        ]),
+        ...mapActions('agora', [
+            'initializeAudioAndVideoTracks',
         ]),
     },
 }
