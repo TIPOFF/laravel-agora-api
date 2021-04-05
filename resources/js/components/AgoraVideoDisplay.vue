@@ -58,23 +58,23 @@ export default {
     methods: {
         ...mapMutations({
             setCurrentUser: 'agora/setCurrentUser',
-            initializeAgoraClient: 'agora/initializeAgoraClient',
             setAgoraAppID: 'agora/setAgoraAppID',
             setAgoraRoutePrefix: 'agora/setAgoraRoutePrefix',
             setEchoChannelName: 'agora/setEchoChannelName',
             joinEchoChannel: 'agora/joinEchoChannel',
         }),
+        ...mapActions('agora', [
+            'initializeAgoraClient',
+            'initializeAudioAndVideoTracks',
+            'setEchoChannelUserListeners',
+        ]),
     },
 
     computed: {
-        ...mapState([
+        ...mapState('agora', [
             'callConnected',
             'transmitAudio',
             'transmitVideo',
-        ]),
-        ...mapActions('agora', [
-            'initializeAudioAndVideoTracks',
-            'setEchoChannelUserListeners',
         ]),
     },
 }

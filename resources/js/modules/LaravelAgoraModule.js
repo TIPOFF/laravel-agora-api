@@ -48,25 +48,6 @@ export default {
             state.agoraAppID = id;
         },
 
-        initializeAgoraClient (state) {
-            state.rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-            // state.agoraClient = AgoraRTC.createClient({
-            //     mode: "rtc",
-            //     codec: "h264"
-            // });
-
-            // state.agoraClient.init(
-            //     state.agoraAppID,
-            //     () => {
-            //         console.log("Successfully initialized AgoraRTC client.");
-            //     },
-            //     (err) => {
-            //         console.log("Failed to initialize AgoraRTC client.");
-            //         console.log(err);
-            //     }
-            // );
-        },
-
         setAgoraRoutePrefix(state, prefix) {
             state.agoraRoutePrefix = prefix;
         },
@@ -81,6 +62,53 @@ export default {
     },
 
     actions: {
+        async initializeAgoraClient (state) {
+            state.rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+            // Listen for people joining the call.
+            state.rtc.client.on("user-published", async (user, mediaType) => {
+                // Subscribe to a remote user.
+                await state.rtc.client.subscribe(user, mediaType);
+                console.log("subscribe success");
+                
+                // If the subscribed track is video.
+                if (mediaType === "video") {
+                    // Get `RemoteVideoTrack` in the `user` object.
+                    const remoteVideoTrack = user.videoTrack;
+                    // Dynamically create a container in the form of a DIV element for playing the remote video track.
+                    const playerContainer = document.createElement("div");
+                    // Specify the ID of the DIV container. You can use the `uid` of the remote user.
+                    playerContainer.id = user.uid.toString();
+                    playerContainer.style.width = "640px";
+                    playerContainer.style.height = "480px";
+                    document.body.append(playerContainer);
+                
+                    // Play the remote video track.
+                    // Pass the DIV container and the SDK dynamically creates a player in the container for playing the remote video track.
+                    remoteVideoTrack.play(playerContainer);
+                
+                    // Or just pass the ID of the DIV container.
+                    // remoteVideoTrack.play(playerContainer.id);
+                }
+                
+                // If the subscribed track is audio.
+                if (mediaType === "audio") {
+                    // Get `RemoteAudioTrack` in the `user` object.
+                    const remoteAudioTrack = user.audioTrack;
+                    // Play the audio track. No need to pass any DOM element.
+                    remoteAudioTrack.play();
+                }
+            });
+
+            // Listen for users leaving the call.
+            rtc.client.on("user-unpublished", user => {
+                // Get the dynamically created DIV container.
+                const playerContainer = document.getElementById(user.uid);
+                // Destroy the container.
+                playerContainer.remove();
+            });
+        },
+
         async setEchoChannelUserListeners(state) {
             state.echoChannel.here((users) => {
                 state.activeUsers = users;
@@ -104,7 +132,7 @@ export default {
                 state.activeUsers.splice(usersIndex, 1);
             });
 
-            state.echoChannel.listen(".Tipoff\\LaravelAgoraApi\\Events\\DispatchAgoraCall", (data) => {
+            state.echoChannel.listen(".Tipoff\\LaravelAgoraApi\\Events\\DispatchAgoraCall", async (data) => {
                 console.log('Incoming call...');
                 console.log(data);
                 if (parseInt(data.recipientId) === parseInt(state.currentUser.id)) {
@@ -133,8 +161,6 @@ export default {
         },
 
         async initializeAudioAndVideoTracks ({commit, state, dispatch}) {
-            // state.rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-            // state.rtc.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
             [state.rtc.localAudioTrack, state.rtc.localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
 
             await state.rtc.client.publish([state.rtc.localAudioTrack, state.rtc.localVideoTrack]);
@@ -165,57 +191,15 @@ export default {
             );
             
             dispatch('initializeAudioAndVideoTracks');
-
-            // try {
-            //     const channelName = `channel${state.currentUser.id}to${recipientId}`;
-            //     const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
-            //         channel_name: channelName,
-            //     });
-
-            //     // Broadcasts a call event to the callee and also gets back the token
-            //     await axios.post("/"+ state.agoraRoutePrefix +"/place-call", {
-            //         channel_name: channelName,
-            //         recipient_id: recipientId,
-            //     });
-
-            //     commit('initializeAgoraClient');
-
-            //     dispatch('joinRoom', {
-            //         token: token.data,
-            //         channel: channelName
-            //     });
-            // } catch (err) {
-            //     console.log(err);
-            // }
         },
 
-        async joingAgoraChannel({commit, state, dispatch}, {token, channel}) {
+        async joinAgoraChannel({commit, state, dispatch}, {token, channel}) {
 
         },
 
-        // joinRoom({commit, state, dispatch}, {token, channel}) {
-        //     console.log('Joining Agora room...');
+        async leaveCall({commit, state, dispatch}) {
 
-
-        //     console.log(token);
-        //     console.log(channel);
-        //     state.agoraClient.join(
-        //         token,
-        //         channel,
-        //         state.currentUser.id,
-        //         (uid) => {
-        //             console.log(`User ${uid} joined Agora channel successfully.`);
-        //             state.callConnected = true;
-
-        //             // commit('createLocalStream');
-        //             // commit('initializeAgoraListeners');
-        //         },
-        //         (err) => {
-        //             console.log("Failed to join channel.");
-        //             console.log(err);
-        //         }
-        //     );
-        // },
+        },
     },
 
     getters: {}

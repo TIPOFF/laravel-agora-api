@@ -23,7 +23,7 @@ export default {
     name: "AgoraIncomingCallAlert",
 
     computed: {
-        ...mapState([
+        ...mapState('agora', [
             'callIsIncoming',
             'incomingCaller',
         ]),
