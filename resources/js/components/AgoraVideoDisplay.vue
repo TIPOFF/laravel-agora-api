@@ -1,7 +1,7 @@
 <template>
-    <div id="video-container" v-if="callConnected">
-        <div id="local-video"></div>
-        <div id="remote-video"></div>
+    <div id="video-container">
+        <div id="local-video" style="width: 100%;"></div>
+        <div id="remote-video" style="width: 640px; height: 480px;"></div>
 
         <div class="agora-call-action-btns">
             <button class="agora-btn-toggle-audio" @click="toggleAudio">
@@ -67,7 +67,16 @@ export default {
             'initializeAgoraClient',
             'initializeAudioAndVideoTracks',
             'setEchoChannelUserListeners',
+            'hangUp',
         ]),
+
+        toggleAudio: function() {
+            console.log('clicked!');
+        },
+
+        toggleVideo: function() {
+            console.log('clicked!');
+        },
     },
 
     computed: {

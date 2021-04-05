@@ -62,7 +62,7 @@ export default {
     },
 
     actions: {
-        async initializeAgoraClient (state) {
+        async initializeAgoraClient ({commit, state, dispatch}) {
             state.rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
             // Listen for people joining the call.
@@ -75,20 +75,8 @@ export default {
                 if (mediaType === "video") {
                     // Get `RemoteVideoTrack` in the `user` object.
                     const remoteVideoTrack = user.videoTrack;
-                    // Dynamically create a container in the form of a DIV element for playing the remote video track.
-                    const playerContainer = document.createElement("div");
-                    // Specify the ID of the DIV container. You can use the `uid` of the remote user.
-                    playerContainer.id = user.uid.toString();
-                    playerContainer.style.width = "640px";
-                    playerContainer.style.height = "480px";
-                    document.body.append(playerContainer);
-                
-                    // Play the remote video track.
-                    // Pass the DIV container and the SDK dynamically creates a player in the container for playing the remote video track.
-                    remoteVideoTrack.play(playerContainer);
-                
-                    // Or just pass the ID of the DIV container.
-                    // remoteVideoTrack.play(playerContainer.id);
+
+                    remoteVideoTrack.play('remote-video');
                 }
                 
                 // If the subscribed track is audio.
@@ -101,15 +89,19 @@ export default {
             });
 
             // Listen for users leaving the call.
-            rtc.client.on("user-unpublished", user => {
+            state.rtc.client.on("user-unpublished", user => {
                 // Get the dynamically created DIV container.
-                const playerContainer = document.getElementById(user.uid);
+                const playerContainer = document.getElementById('remote-video');
                 // Destroy the container.
                 playerContainer.remove();
+
+                // Need to recreate it in case they make another call.
+                //
+
             });
         },
 
-        async setEchoChannelUserListeners(state) {
+        async setEchoChannelUserListeners({commit, state, dispatch}) {
             state.echoChannel.here((users) => {
                 state.activeUsers = users;
             });
@@ -146,8 +138,6 @@ export default {
                     //     channel_name: state.agoraChannelName,
                     // });
 
-                    state.rtc.client.setClientRole("audience");
-
                     const uid = await state.rtc.client.join(
                         state.agoraAppID,
                         state.agoraChannelName,
@@ -169,13 +159,14 @@ export default {
         },
 
         async makeCall({commit, state, dispatch}, recipientId) {
-            state.rtc.client.setClientRole("host");
+            // state.rtc.client.setClientRole("host");
 
             // const channelName = `channel${state.currentUser.id}to${recipientId}`;
             const channelName = 'some-great-channel';
-//             const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
-//                 channel_name: channelName,
-//             });
+            
+            const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
+                channel_name: channelName,
+            });
 // console.log(token);
             // Broadcasts a call event to the callee.
             await axios.post("/"+ state.agoraRoutePrefix +"/place-call", {
@@ -197,8 +188,20 @@ export default {
 
         },
 
-        async leaveCall({commit, state, dispatch}) {
+        async hangUp({commit, state, dispatch}) {
+            // Destroy the local audio and video tracks.
+            state.rtc.localAudioTrack.close();
+            state.rtc.localVideoTrack.close();
 
+            // Traverse all remote users.
+            state.rtc.client.remoteUsers.forEach(user => {
+                // Destroy the dynamically created DIV container.
+                const playerContainer = document.getElementById('remote-video');
+                playerContainer && playerContainer.remove();
+            });
+
+            // Leave the channel.
+            await state.rtc.client.leave();
         },
     },
 
