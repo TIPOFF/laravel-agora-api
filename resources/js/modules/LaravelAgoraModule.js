@@ -36,6 +36,7 @@ export default {
         echoChannel: null,
 
         agoraChannelName: '',
+        agoraToken: '',
     }),
 
     mutations: {
@@ -134,58 +135,44 @@ export default {
 
                     state.agoraChannelName = data.agoraChannel;
 
-                    // const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
-                    //     channel_name: state.agoraChannelName,
-                    // });
-
-                    const uid = await state.rtc.client.join(
-                        state.agoraAppID,
-                        state.agoraChannelName,
-                        token,
-                        state.currentUser.id
-                    );
+                    state.agoraToken = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
+                        channel_name: state.agoraChannelName,
+                    });
             
-                    dispatch('initializeAudioAndVideoTracks');
+                    dispatch('joinAgoraChannel');
                 }
             });
-        },
-
-        async initializeAudioAndVideoTracks ({commit, state, dispatch}) {
-            [state.rtc.localAudioTrack, state.rtc.localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
-
-            await state.rtc.client.publish([state.rtc.localAudioTrack, state.rtc.localVideoTrack]);
-
-            console.log('Local audio and video published.');
         },
 
         async makeCall({commit, state, dispatch}, recipientId) {
             // state.rtc.client.setClientRole("host");
 
-            // const channelName = `channel${state.currentUser.id}to${recipientId}`;
-            const channelName = 'some-great-channel';
+            state.agoraChannelName = `channel${state.currentUser.id}to${recipientId}`;
             
-            const token = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
-                channel_name: channelName,
+            state.agoraToken = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
+                channel_name: state.agoraChannelName,
             });
-// console.log(token);
+
             // Broadcasts a call event to the callee.
             await axios.post("/"+ state.agoraRoutePrefix +"/place-call", {
-                channel_name: channelName,
+                channel_name: state.agoraChannelName,
                 recipient_id: recipientId,
             });
             
-            const uid = await state.rtc.client.join(
-                state.agoraAppID,
-                channelName,
-                token,
-                state.currentUser.id
-            );
-            
-            dispatch('initializeAudioAndVideoTracks');
+            dispatch('joinAgoraChannel');
         },
 
-        async joinAgoraChannel({commit, state, dispatch}, {token, channel}) {
+        async joinAgoraChannel({commit, state, dispatch}) {
+            await state.rtc.client.join(
+                state.agoraAppID,
+                state.agoraChannelName,
+                state.agoraToken,
+                state.currentUser.id
+            );
 
+            [state.rtc.localAudioTrack, state.rtc.localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
+
+            await state.rtc.client.publish([state.rtc.localAudioTrack, state.rtc.localVideoTrack]);
         },
 
         async hangUp({commit, state, dispatch}) {
@@ -195,7 +182,6 @@ export default {
 
             // Traverse all remote users.
             state.rtc.client.remoteUsers.forEach(user => {
-                // Destroy the dynamically created DIV container.
                 const playerContainer = document.getElementById('remote-video');
                 playerContainer && playerContainer.remove();
             });
