@@ -186,7 +186,6 @@ export default {
         },
 
         async joinAgoraChannel({commit, state, dispatch}) {
-            console.log(state.agoraToken);
             await state.rtc.client.join(
                 state.agoraAppID,
                 state.agoraChannelName,
@@ -197,6 +196,9 @@ export default {
             [state.rtc.localAudioTrack, state.rtc.localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
 
             await state.rtc.client.publish([state.rtc.localAudioTrack, state.rtc.localVideoTrack]);
+
+            commit('setTransmitAudio', true);
+            commit('setTransmitVideo', true);
 
             commit('setCallConnected', true);
         },
@@ -216,22 +218,22 @@ export default {
             await state.rtc.client.leave();
         },
 
-        async muteAudio({state}) {
+        async muteAudio({commit, state}) {
             await state.rtc.localAudioTrack.setEnabled(false);
             commit('setTransmitAudio', false);
         },
 
-        async unmuteAudio({state}) {
+        async unmuteAudio({commit, state}) {
             await state.rtc.localAudioTrack.setEnabled(true);
             commit('setTransmitAudio', true);
         },
 
-        async hideVideo({state}) {
+        async hideVideo({commit, state}) {
             await state.rtc.localVideoTrack.setEnabled(false);
             commit('setTransmitVideo', false);
         },
 
-        async streamVideo({state}) {
+        async streamVideo({commit, state}) {
             await state.rtc.localVideoTrack.setEnabled(true);
             commit('setTransmitVideo', true);
         },

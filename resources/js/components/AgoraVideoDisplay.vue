@@ -4,17 +4,17 @@
         <div id="remote-video" style="width: 640px; height: 480px;"></div>
 
         <div class="agora-call-action-btns">
-            <button v-if="transmitAudio" class="agora-btn-toggle-audio" @click="muteAudio">
+            <button v-if="callConnected && transmitAudio" class="agora-btn-toggle-audio" @click="muteAudio">
                 Mute
             </button>
-            <button v-else class="agora-btn-toggle-audio" @click="unmuteAudio">
+            <button v-else-if="callConnected && !transmitAudio" class="agora-btn-toggle-audio" @click="unmuteAudio">
                 Unmute
             </button>
 
-            <button v-if="transmitVideo" class="agora-btn-toggle-video" @click="hideVideo">
+            <button v-if="callConnected && transmitVideo" class="agora-btn-toggle-video" @click="hideVideo">
                 Hide Video
             </button>
-            <button v-else class="agora-btn-toggle-video" @click="streamVideo">
+            <button v-else-if="callConnected && !transmitVideo" class="agora-btn-toggle-video" @click="streamVideo">
                 Show Video
             </button>
 
