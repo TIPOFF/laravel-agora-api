@@ -60,7 +60,7 @@ class AgoraControllerTest extends TestCase
                 'RolePublisher' => 1,
                 'RoleSubscriber' => 2,
                 'RoleAdmin' => 101,
-            ]
+            ],
         ]);
 
         $user = self::createPermissionedUser('make video call', true);
@@ -115,7 +115,8 @@ class AgoraControllerTest extends TestCase
     }
 }
 
-class RtcTokenBuilderStub {
+class RtcTokenBuilderStub
+{
     const RoleAttendee = 0;
     const RolePublisher = 1;
     const RoleSubscriber = 2;
