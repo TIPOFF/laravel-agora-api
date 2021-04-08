@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Mockery;
+use Tipoff\Authorization\Models\User;
 use Tipoff\LaravelAgoraApi\Events\DispatchAgoraCall;
 use Tipoff\LaravelAgoraApi\Tests\TestCase;
 
@@ -30,7 +31,7 @@ class AgoraControllerTest extends TestCase
 
     public function testInvalidRequestsDoNotReturnAToken()
     {
-        $response = $this->actingAs(self::createPermissionedUser('make video call', true))
+        $response = $this->actingAs(User::factory()->create())
             ->postJson(route('agora.retrieve-token'));
 
         $response->assertStatus(422);
@@ -38,7 +39,7 @@ class AgoraControllerTest extends TestCase
 
     public function testInvalidRequestsDoNotReturnPlaceACall()
     {
-        $response = $this->actingAs(self::createPermissionedUser('make video call', true))
+        $response = $this->actingAs(User::factory()->create())
             ->postJson(route('agora.place-call'));
 
         $response->assertStatus(422);
@@ -52,7 +53,7 @@ class AgoraControllerTest extends TestCase
             ->shouldReceive('buildTokenWithUid')
             ->andReturn($fakeTokenContents);
 
-        $user = self::createPermissionedUser('make video call', true);
+        $user = User::factory()->create();
         $user->name = 'John Doe';
 
         $response = $this->actingAs($user)
@@ -68,31 +69,29 @@ class AgoraControllerTest extends TestCase
         Mockery::close();
     }
 
-    // public function testAuthorizedUsersCanPlaceACall()
-    // {
-    //     Config::set('user_display_name.fields', [
-    //         'first_name',
-    //         'last_name'
-    //     ]);
+    public function testAuthorizedUsersCanPlaceACall()
+    {
+        Event::fake();
 
-    //     Event::fake();
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
 
-    //     $response = $this->actingAs(self::createPermissionedUser('make video call', true))
-    //         ->postJson(route('agora.place-call'), [
-    //             'channel_name' => $this->faker->word,
-    //             'recipient_id' => User::factory()->create()->id,
-    //         ]);
+        $response = $this->actingAs($user)
+            ->postJson(route('agora.place-call'), [
+                'channel_name' => $this->faker->word,
+                'recipient_id' => User::factory()->create()->id,
+            ]);
 
-    //     Event::assertDispatched(DispatchAgoraCall::class);
+        Event::assertDispatched(DispatchAgoraCall::class);
 
-    //     $response->assertStatus(200);
-    // }
+        $response->assertStatus(200);
+    }
 
     public function testNonexistentUsersCannotBeCalled()
     {
         Event::fake();
 
-        $response = $this->actingAs(self::createPermissionedUser('make video call', true))
+        $response = $this->actingAs(User::factory()->create())
             ->postJson(route('agora.place-call'), [
                 'channel_name' => $this->faker->word,
                 'recipient_id' => 'not-a-real-user-id',
