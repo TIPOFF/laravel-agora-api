@@ -51,7 +51,7 @@ class AgoraControllerTest extends TestCase
         $fakeTokenContents = 'an-Agora-token';
         
         $mock = Mockery::mock('overload:Tipoff\LaravelAgoraApi\AgoraDynamicKey\RtcTokenBuilder')->makePartial();
-        $mock->shouldReceive('buildTokenWithUserAccount')->once()->andReturn($fakeTokenContents);
+        $mock->shouldReceive('buildTokenWithUid')->once()->andReturn($fakeTokenContents);
 
         $user = self::createPermissionedUser('make video call', true);
         $user->name = 'John Doe';
