@@ -22,7 +22,7 @@ class AgoraController extends Controller
                 config('agora.credentials.app_id'),
                 config('agora.credentials.certificate'),
                 $request->input('channel_name'),
-                DisplayNameService::getDisplayName(Auth::user()),
+                Auth::id(),
                 RtcTokenBuilder::RoleAttendee,
                 now()->getTimestamp() + 3600
             ),
