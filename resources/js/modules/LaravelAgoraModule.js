@@ -45,6 +45,10 @@ export default {
             state.currentUser.name = user.name;
         },
 
+        setActiveUsers(state, users) {
+            state.activeUsers = users;
+        },
+
         setAgoraAppID (state, id) {
             state.agoraAppID = id;
         },
@@ -135,25 +139,32 @@ export default {
 
         async setEchoChannelUserListeners({commit, state, dispatch}) {
             state.echoChannel.here((users) => {
-                state.activeUsers = users;
+                commit('setActiveUsers', users);
             });
 
             state.echoChannel.joining((user) => {
-                let usersIndex = state.activeUsers.findIndex((data) => {
+                let newActiveUsers = state.activeUsers.slice();
+
+                let usersIndex = newActiveUsers.findIndex((data) => {
                     data.id === user.id;
                 });
 
                 if (usersIndex === -1) {
-                    state.activeUsers.push(user);
+                    newActiveUsers.push(user);
+                    commit('setActiveUsers', newActiveUsers);
                 }
             });
 
             state.echoChannel.leaving((user) => {
-                let usersIndex = state.activeUsers.findIndex((data) => {
+                let newActiveUsers = state.activeUsers.slice();
+
+                let usersIndex = newActiveUsers.findIndex((data) => {
                     data.id === user.id;
                 });
 
-                state.activeUsers.splice(usersIndex, 1);
+                newActiveUsers.splice(usersIndex, 1);
+
+                commit('setActiveUsers', newActiveUsers);
             });
 
             state.echoChannel.listen(".Tipoff\\LaravelAgoraApi\\Events\\DispatchAgoraCall", async (data) => {
