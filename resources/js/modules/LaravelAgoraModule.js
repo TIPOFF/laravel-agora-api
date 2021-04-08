@@ -118,14 +118,8 @@ export default {
             });
 
             // Listen for users leaving the call.
-            state.rtc.client.on("user-unpublished", user => {
-                // Get the dynamically created DIV container.
-                const playerContainer = document.getElementById('remote-video');
-                // Destroy the container.
-                // playerContainer.remove();
-
-                // Need to recreate it in case they make another call.
-                //
+            state.rtc.client.on("user-unpublished", async user => {
+                await dispatch('leaveAgoraChannel');
 
                 commit('setCallConnected', false);
             });
@@ -225,19 +219,16 @@ export default {
             commit('setCallConnected', true);
         },
 
-        async hangUp({commit, state, dispatch}) {
+        async leaveAgoraChannel({state}) {
             // Destroy the local audio and video tracks.
             state.rtc.localAudioTrack.close();
             state.rtc.localVideoTrack.close();
 
-            // Traverse all remote users.
-            // state.rtc.client.remoteUsers.forEach(user => {
-            //     const playerContainer = document.getElementById('remote-video');
-            //     playerContainer && playerContainer.remove();
-            // });
-
-            // Leave the channel.
             await state.rtc.client.leave();
+        },
+
+        async hangUp({commit, state, dispatch}) {
+            await dispatch('leaveAgoraChannel');
 
             commit('setCallConnected', false);
         },
