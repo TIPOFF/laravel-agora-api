@@ -4,10 +4,8 @@ namespace Tipoff\LaravelAgoraApi\Tests\Feature\Http;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Mockery;
-use Tipoff\Authorization\Models\User;
 use Tipoff\LaravelAgoraApi\Events\DispatchAgoraCall;
 use Tipoff\LaravelAgoraApi\Tests\TestCase;
 
