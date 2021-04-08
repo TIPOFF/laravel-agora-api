@@ -127,6 +127,7 @@ export default {
                 // Need to recreate it in case they make another call.
                 //
 
+                commit('setCallConnected', false);
             });
         },
 
@@ -237,6 +238,8 @@ export default {
 
             // Leave the channel.
             await state.rtc.client.leave();
+
+            commit('setCallConnected', false);
         },
 
         async muteAudio({commit, state}) {
