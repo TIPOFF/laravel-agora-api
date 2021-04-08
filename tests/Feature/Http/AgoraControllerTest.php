@@ -49,9 +49,19 @@ class AgoraControllerTest extends TestCase
     public function testAuthorizedUsersCanRetrieveAToken()
     {
         $fakeTokenContents = 'an-Agora-token';
-        
-        $mock = Mockery::mock('overload:Tipoff\LaravelAgoraApi\AgoraDynamicKey\RtcTokenBuilder')->makePartial();
-        $mock->shouldReceive('buildTokenWithUid')->once()->andReturn($fakeTokenContents);
+
+        Mockery::namedMock('Tipoff\LaravelAgoraApi\AgoraDynamicKey\RtcTokenBuilder', 'Tipoff\LaravelAgoraApi\Tests\Feature\Http\RtcTokenBuilderStub')
+            ->shouldReceive('buildTokenWithUid')
+            ->andReturn($fakeTokenContents);
+
+        Mockery::getConfiguration()->setConstantsMap([
+            'RtcTokenBuilder' => [
+                'RoleAttendee' => 0,
+                'RolePublisher' => 1,
+                'RoleSubscriber' => 2,
+                'RoleAdmin' => 101,
+            ]
+        ]);
 
         $user = self::createPermissionedUser('make video call', true);
         $user->name = 'John Doe';
@@ -103,4 +113,11 @@ class AgoraControllerTest extends TestCase
 
         $response->assertStatus(422);
     }
+}
+
+class RtcTokenBuilderStub {
+    const RoleAttendee = 0;
+    const RolePublisher = 1;
+    const RoleSubscriber = 2;
+    const RoleAdmin = 101;
 }

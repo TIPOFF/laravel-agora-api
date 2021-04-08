@@ -23,7 +23,7 @@ class AgoraController extends Controller
                 config('agora.credentials.certificate'),
                 $request->input('channel_name'),
                 DisplayNameService::getDisplayName(Auth::user()),
-                0, // RtcTokenBuilder::RoleAttendee is throwing an `Undefined constant` error for some reason. Leaving this for now.
+                RtcTokenBuilder::RoleAttendee,
                 now()->getTimestamp() + 3600
             ),
         ]);
