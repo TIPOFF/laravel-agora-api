@@ -160,7 +160,7 @@ export default {
                     // If they do accept the call, hang up on any other calls that they are
                     // involved in first before connecting to the incoming one.
                     
-                    state.agoraChannelName = data.agoraChannel;
+                    commit('setAgoraChannel', data.agoraChannel);
 
                     commit('setCallConnected', true);
 
@@ -174,7 +174,7 @@ export default {
         async makeCall({commit, state, dispatch}, recipientId) {
             // state.rtc.client.setClientRole("host");
 
-            state.agoraChannelName = `channel${state.currentUser.id}to${recipientId}`;
+            commit('setAgoraChannel', `channel${state.currentUser.id}to${recipientId}`);
 
             await dispatch('fetchAgoraToken');
 
