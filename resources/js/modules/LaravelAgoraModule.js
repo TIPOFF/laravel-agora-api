@@ -150,17 +150,23 @@ export default {
                     state.incomingCaller = data.senderDisplayName;
                     state.callIsIncoming = true;
 
+                    // The break in flow starts here. Just set things to an "incoming"
+                    // status (including the incoming channel) and only proceed to 
+                    // connect if they click on the button.
+                    // ALSO, if they do not respond within a certain amount of time,
+                    // auto-reject the call. (Including dispatching the rejected/not
+                    // answered event.)
+
+                    // If they do accept the call, hang up on any other calls that they are
+                    // involved in first before connecting to the incoming one.
+                    
                     state.agoraChannelName = data.agoraChannel;
 
                     commit('setCallConnected', true);
 
-                    let resp = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
-                        channel_name: state.agoraChannelName,
-                    });
-
-                    commit('setAgoraToken', resp.data.token);
+                    await dispatch('fetchAgoraToken');
             
-                    dispatch('joinAgoraChannel');
+                    await dispatch('joinAgoraChannel');
                 }
             });
         },
@@ -170,11 +176,7 @@ export default {
 
             state.agoraChannelName = `channel${state.currentUser.id}to${recipientId}`;
 
-            let resp = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
-                channel_name: state.agoraChannelName,
-            });
-
-            commit('setAgoraToken', resp.data.token);
+            await dispatch('fetchAgoraToken');
 
             // Broadcasts a call event to the callee.
             await axios.post("/"+ state.agoraRoutePrefix +"/place-call", {
@@ -185,7 +187,15 @@ export default {
             dispatch('joinAgoraChannel');
         },
 
-        async joinAgoraChannel({commit, state, dispatch}) {
+        async fetchAgoraToken({commit, state}) {
+            let resp = await axios.post("/"+ state.agoraRoutePrefix +"/retrieve-token", {
+                channel_name: state.agoraChannelName,
+            });
+
+            commit('setAgoraToken', resp.data.token);
+        },
+
+        async joinAgoraChannel({commit, state}) {
             await state.rtc.client.join(
                 state.agoraAppID,
                 state.agoraChannelName,
