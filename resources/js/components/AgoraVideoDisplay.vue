@@ -18,7 +18,7 @@
                 Show Video
             </button>
 
-            <button class="agora-btn-hang-up" @click="hangUp">
+            <button v-if="callConnected" class="agora-btn-hang-up" @click="hangUp">
                 Hang Up
             </button>
         </div>
