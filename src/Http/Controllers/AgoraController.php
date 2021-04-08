@@ -18,12 +18,12 @@ class AgoraController extends Controller
 
         /** @psalm-suppress NoInterfaceProperties */
         return response()->json([
-            'token' => RtcTokenBuilder::buildTokenWithUserAccount(
+            'token' => RtcTokenBuilder::buildTokenWithUid(
                 config('agora.credentials.app_id'),
                 config('agora.credentials.certificate'),
                 $request->input('channel_name'),
                 DisplayNameService::getDisplayName(Auth::user()),
-                0, // RtcTokenBuilder::RoleAttendee is throwing an `Undefined constant` error for some reason. Leaving this for now.
+                RtcTokenBuilder::RolePublisher,
                 now()->getTimestamp() + 3600
             ),
         ]);
