@@ -14,7 +14,12 @@ Install the package via composer:
 composer require tipoff/laravel-agora-api
 ```
 
-You may publish the config file with the following command:
+You may publish all of the packages resources (including the frontend assets) with the following command:
+```bash
+php artisan vendor:publish --provider="Tipoff\LaravelAgoraApi\LaravelAgoraApiServiceProvider"
+```
+
+You may publish just the config file with the following command:
 ```bash
 php artisan vendor:publish --tag=agora-config
 ```
@@ -172,7 +177,7 @@ After updating to a newer package version, use `php artisan vendor:publish --tag
 
 The Vue components available with this package have a variety of CSS classes attached to their HTML elements. This allows you to "hook" into the components and style them without having to modify them directly. You may view the various CSS classes available on the individual Vue components.
 
-A starter file written in TailwindCSS can be published by running `php artisan vendor:publish --tag=agora-css`. After it is published, include it in your `resources/css/app.css` file and Laravel Mix will transpile it into your application for you (if using the default Mix setup).
+A starter file written in TailwindCSS can be published by running `php artisan vendor:publish --tag=agora-css`. After it is published, include it in your `resources/css/app.css` file (`@import 'vendor/agora-component-styles.css';`) and Laravel Mix will transpile it into your application for you (if using the default Mix setup).
 
 ## Contributing
 
