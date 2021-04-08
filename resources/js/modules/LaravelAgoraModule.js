@@ -85,6 +85,10 @@ export default {
             state.rtc.localVideoTrack = videoTrack;
         },
 
+        setCallIsIncoming(state, newState) {
+            state.callIsIncoming = newState;
+        },
+
         setCallConnected(state, newState) {
             state.callConnected = newState;
         },
@@ -151,7 +155,7 @@ export default {
             state.echoChannel.listen(".Tipoff\\LaravelAgoraApi\\Events\\DispatchAgoraCall", async (data) => {
                 if (parseInt(data.recipientId) === parseInt(state.currentUser.id)) {
                     state.incomingCaller = data.senderDisplayName;
-                    state.callIsIncoming = true;
+                    commit('setCallIsIncoming', true);
 
                     // The break in flow starts here. Just set things to an "incoming"
                     // status (including the incoming channel) and only proceed to 
@@ -216,6 +220,7 @@ export default {
             commit('setTransmitAudio', true);
             commit('setTransmitVideo', true);
 
+            commit('setCallIsIncoming', false);
             commit('setCallConnected', true);
         },
 
