@@ -118,7 +118,7 @@ export default {
             });
 
             // Listen for users leaving the call.
-            state.rtc.client.on("user-unpublished", async user => {
+            state.rtc.client.on("user-left", async user => {
                 await dispatch('leaveAgoraChannel');
 
                 commit('setCallConnected', false);
