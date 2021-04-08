@@ -4,22 +4,23 @@
         <div id="remote-video" style="width: 640px; height: 480px;"></div>
 
         <div class="agora-call-action-btns">
-            <button class="agora-btn-toggle-audio" @click="toggleAudio">
-                {{ transmitAudio ? "Mute" : "Unmute" }}
+            <button v-if="transmitAudio" class="agora-btn-toggle-audio" @click="muteAudio">
+                Mute
+            </button>
+            <button v-else class="agora-btn-toggle-audio" @click="unmuteAudio">
+                Unmute
             </button>
 
-            <button class="agora-btn-toggle-video" @click="toggleVideo">
-                {{ transmitVideo ? "Hide Video" : "Show Video" }}
+            <button v-if="transmitVideo" class="agora-btn-toggle-video" @click="hideVideo">
+                Hide Video
+            </button>
+            <button v-else class="agora-btn-toggle-video" @click="streamVideo">
+                Show Video
             </button>
 
             <button class="agora-btn-hang-up" @click="hangUp">
                 Hang Up
             </button>
-        </div>
-
-        <div>
-            {{ transmitAudio }}
-            {{ transmitVideo }}
         </div>
     </div>
 </template>
@@ -67,16 +68,12 @@ export default {
             'initializeAgoraClient',
             'initializeAudioAndVideoTracks',
             'setEchoChannelUserListeners',
+            'muteAudio',
+            'unmuteAudio',
+            'hideVideo',
+            'streamVideo',
             'hangUp',
         ]),
-
-        toggleAudio: function() {
-            console.log('clicked!');
-        },
-
-        toggleVideo: function() {
-            console.log('clicked!');
-        },
     },
 
     computed: {
