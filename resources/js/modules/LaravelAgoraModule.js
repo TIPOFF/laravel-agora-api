@@ -77,6 +77,14 @@ export default {
             state.transmitVideo = newState;
         },
 
+        setLocalAudioTrack(state, audioTrack) {
+            state.rtc.localAudioTrack = audioTrack;
+        },
+
+        setLocalVideoTrack(state, videoTrack) {
+            state.rtc.localVideoTrack = videoTrack;
+        },
+
         setCallConnected(state, newState) {
             state.callConnected = newState;
         },
@@ -203,7 +211,10 @@ export default {
                 state.currentUser.id
             );
 
-            [state.rtc.localAudioTrack, state.rtc.localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
+            let [localAudio, localVideo] = await AgoraRTC.createMicrophoneAndCameraTracks();
+
+            commit('setLocalAudioTrack', localAudio);
+            commit('setLocalVideoTrack', localVideo);
 
             await state.rtc.client.publish([state.rtc.localAudioTrack, state.rtc.localVideoTrack]);
 
