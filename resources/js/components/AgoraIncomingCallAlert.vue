@@ -4,11 +4,11 @@
             <p>Incoming call from: {{ incomingCaller }}</p>
 
             <div class="btn-group" role="group">
-                <button class="agora-btn-accept" @click="acceptCall">
+                <button class="agora-btn agora-btn-success agora-btn-accept" @click="acceptCall">
                     Accept
                 </button>
 
-                <button class="agora-btn-decline" @click="declineCall">
+                <button class="agora-btn agora-btn-danger agora-btn-decline" @click="declineCall">
                     Decline
                 </button>
             </div>

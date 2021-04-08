@@ -4,7 +4,7 @@
         <template v-for="user in activeUsers">
             <div v-bind:key="user.id" v-if="user.id !== currentUser.id" class="agora-active-user-details">
                 {{ user.name }}
-                <button @click="makeCall(user.id)" class="agora-btn agora-success-btn agora-call-user-button">Call</button>
+                <button @click="makeCall(user.id)" class="agora-btn agora-btn-success agora-call-user-button">Call</button>
             </div>
         </template>
     </div>

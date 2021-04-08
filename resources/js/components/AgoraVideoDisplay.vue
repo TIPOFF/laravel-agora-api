@@ -4,21 +4,21 @@
         <div id="remote-video" style="width: 640px; height: 480px;"></div>
 
         <div class="agora-call-action-btns">
-            <button v-if="callConnected && transmitAudio" class="agora-btn-toggle-audio" @click="muteAudio">
+            <button v-if="callConnected && transmitAudio" class="agora-btn agora-btn-audio agora-btn-danger agora-btn-mute-audio" @click="muteAudio">
                 Mute
             </button>
-            <button v-else-if="callConnected && !transmitAudio" class="agora-btn-toggle-audio" @click="unmuteAudio">
+            <button v-else-if="callConnected && !transmitAudio" class="agora-btn agora-btn-audio agora-btn-success agora-btn-unmute-audio" @click="unmuteAudio">
                 Unmute
             </button>
 
-            <button v-if="callConnected && transmitVideo" class="agora-btn-toggle-video" @click="hideVideo">
+            <button v-if="callConnected && transmitVideo" class="agora-btn agora-btn-video agora-btn-danger agora-btn-hide-video" @click="hideVideo">
                 Hide Video
             </button>
-            <button v-else-if="callConnected && !transmitVideo" class="agora-btn-toggle-video" @click="streamVideo">
+            <button v-else-if="callConnected && !transmitVideo" class="agora-btn agora-btn-video agora-btn-success agora-btn-show-video" @click="streamVideo">
                 Show Video
             </button>
 
-            <button v-if="callConnected" class="agora-btn-hang-up" @click="hangUp">
+            <button v-if="callConnected" class="agora-btn agora-btn-danger agora-btn-hang-up" @click="hangUp">
                 Hang Up
             </button>
         </div>

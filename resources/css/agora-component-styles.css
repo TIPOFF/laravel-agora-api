@@ -1,0 +1,13 @@
+@layer components {
+    .agora-btn {
+        @apply rounded-lg py-1 px-3;
+    }
+
+    .agora-btn-success {
+        @apply bg-green-500 hover:bg-green-600 text-white;
+    }
+
+    .agora-btn-danger {
+        @apply bg-red-500 hover:bg-red-600 text-white;
+    }
+}

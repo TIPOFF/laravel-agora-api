@@ -168,6 +168,12 @@ Run `npm run dev` to transpile the assets. You may now use the Vue components wi
 
 After updating to a newer package version, use `php artisan vendor:publish --tag=agora-js --force` to make sure that updates to package resources are republished to your application's `resources` directory.
 
+## Styling Components
+
+The Vue components available with this package have a variety of CSS classes attached to their HTML elements. This allows you to "hook" into the components and style them without having to modify them directly. You may view the various CSS classes available on the individual Vue components.
+
+A starter file written in TailwindCSS can be published by running `php artisan vendor:publish --tag=agora-css`. After it is published, include it in your `resources/css/app.css` file and Laravel Mix will transpile it into your application for you (if using the default Mix setup).
+
 ## Contributing
 
 Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
