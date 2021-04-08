@@ -52,15 +52,6 @@ class AgoraControllerTest extends TestCase
             ->shouldReceive('buildTokenWithUid')
             ->andReturn($fakeTokenContents);
 
-        Mockery::getConfiguration()->setConstantsMap([
-            'RtcTokenBuilder' => [
-                'RoleAttendee' => 0,
-                'RolePublisher' => 1,
-                'RoleSubscriber' => 2,
-                'RoleAdmin' => 101,
-            ],
-        ]);
-
         $user = self::createPermissionedUser('make video call', true);
         $user->name = 'John Doe';
 
