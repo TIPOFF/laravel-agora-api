@@ -89,6 +89,10 @@ export default {
             state.callIsIncoming = newState;
         },
 
+        setIncomingCaller(state, caller) {
+            state.incomingCaller = caller;
+        },
+
         setCallConnected(state, newState) {
             state.callConnected = newState;
         },
@@ -154,7 +158,7 @@ export default {
 
             state.echoChannel.listen(".Tipoff\\LaravelAgoraApi\\Events\\DispatchAgoraCall", async (data) => {
                 if (parseInt(data.recipientId) === parseInt(state.currentUser.id)) {
-                    state.incomingCaller = data.senderDisplayName;
+                    commit('setIncomingCaller', data.senderDisplayName);
                     commit('setCallIsIncoming', true);
 
                     // The break in flow starts here. Just set things to an "incoming"
@@ -162,7 +166,7 @@ export default {
                     // connect if they click on the button.
                     // ALSO, if they do not respond within a certain amount of time,
                     // auto-reject the call. (Including dispatching the rejected/not
-                    // answered event.)
+                    // answered event.) await dispatch('rejectIncomingCall');
 
                     // If they do accept the call, hang up on any other calls that they are
                     // involved in first before connecting to the incoming one.
