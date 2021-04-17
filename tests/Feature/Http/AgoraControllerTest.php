@@ -89,7 +89,8 @@ class AgoraControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testCallAcceptanceEventIsDispatchable() {
+    public function testCallAcceptanceEventIsDispatchable()
+    {
         Event::fake();
 
         $user = User::factory()->create();
@@ -106,7 +107,8 @@ class AgoraControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testCallAcceptanceEventIsNotDispatchedWhenMissingData() {
+    public function testCallAcceptanceEventIsNotDispatchedWhenMissingData()
+    {
         Event::fake();
 
         $user = User::factory()->create();
@@ -120,7 +122,8 @@ class AgoraControllerTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function testCallRejectionEventIsDispatchable() {
+    public function testCallRejectionEventIsDispatchable()
+    {
         Event::fake();
 
         $user = User::factory()->create();
@@ -137,7 +140,8 @@ class AgoraControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testCallRejectionEventIsNotDispatchedWhenMissingData() {
+    public function testCallRejectionEventIsNotDispatchedWhenMissingData()
+    {
         Event::fake();
 
         $user = User::factory()->create();
