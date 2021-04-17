@@ -203,6 +203,18 @@ export default {
                     commit('setCallOutgoing', false);
                     commit('setCallConnected', false);
                 }
+            })
+            .listen(".Tipoff\\LaravelAgoraApi\\Events\\AgoraCallAccepted", async (data) => {
+                if (parseInt(data.callerId) === parseInt(state.currentUser.id)) {
+                    console.log("Call accepted.");
+
+                    commit('setCallOutgoing', false);
+                    commit('setCallConnected', true);
+
+                    // Do the actual joining of the Agora channel here, after
+                    // the call has been accepted.
+                    dispatch('joinAgoraChannel');
+                }
             });
         },
 
@@ -219,13 +231,17 @@ export default {
                 channel_name: state.agoraChannelName,
                 recipient_id: recipientId,
             });
-            
-            dispatch('joinAgoraChannel');
         },
 
-        async acceptCall({commit, dispatch}) {
+        async acceptCall({commit, state, dispatch}) {
             commit('setCallIsIncoming', false);
             commit('setCallConnected', true);
+
+            // Send acceptance event.
+            await axios.post("/"+ state.agoraRoutePrefix +"/accept-call", {
+                caller_id: state.incomingCallerId,
+                recipient_id: state.currentUser.id,
+            });
 
             await dispatch('fetchAgoraToken');
             await dispatch('joinAgoraChannel');
@@ -275,10 +291,17 @@ export default {
             commit('setCallConnected', true);
         },
 
-        async leaveAgoraChannel({state}) {
+        async leaveAgoraChannel({commit, state}) {
             // Destroy the local audio and video tracks.
-            state.rtc.localAudioTrack.close();
-            state.rtc.localVideoTrack.close();
+            if (state.rtc.localAudioTrack !== null) {
+                state.rtc.localAudioTrack.close();
+                commit('setLocalAudioTrack', null);
+            }
+            
+            if (state.rtc.localVideoTrack !== null) {
+                state.rtc.localVideoTrack.close();
+                commit('setLocalVideoTrack', null);
+            }
 
             await state.rtc.client.leave();
         },
