@@ -21,8 +21,11 @@ export default {
         agoraRoutePrefix: '',
         agoraAppID: null,
 
+        callOutgoing: false,
+
         callIsIncoming: false,
         incomingCaller: null,
+        incomingCallerId: null,
         callConnected: false,
 
         stream: null,
@@ -95,6 +98,14 @@ export default {
 
         setIncomingCaller(state, caller) {
             state.incomingCaller = caller;
+        },
+
+        setIncomingCallerId(state, id) {
+            state.incomingCallerId = id;
+        },
+
+        setCallOutgoing(state, newState) {
+            state.callOutgoing = newState;
         },
 
         setCallConnected(state, newState) {
@@ -170,25 +181,38 @@ export default {
             state.echoChannel.listen(".Tipoff\\LaravelAgoraApi\\Events\\DispatchAgoraCall", async (data) => {
                 if (parseInt(data.recipientId) === parseInt(state.currentUser.id)) {
                     commit('setIncomingCaller', data.senderDisplayName);
+                    commit('setIncomingCallerId', data.senderId);
                     commit('setCallIsIncoming', true);
 
                     // The break in flow starts here. Just set things to an "incoming"
                     // status (including the incoming channel) and only proceed to 
                     // connect if they click on the button.
-                    // ALSO, if they do not respond within a certain amount of time,
+
+                    // TODO: If they do not respond within a certain amount of time,
                     // auto-reject the call. (Including dispatching the rejected/not
                     // answered event.) await dispatch('rejectIncomingCall');
 
-                    // If they do accept the call, hang up on any other calls that they are
+                    // TODO: If they do accept the call, hang up on any other calls that they are
                     // involved in first before connecting to the incoming one.
                     
                     commit('setAgoraChannel', data.agoraChannel);
+                }
+            })
+            .listen(".Tipoff\\LaravelAgoraApi\\Events\\RejectAgoraCall", async (data) => {
+                if (parseInt(data.callerId) === parseInt(state.currentUser.id)) {
+                    console.log("Call rejected.");
+                    
+                    await dispatch('leaveAgoraChannel');
+                    commit('setAgoraChannel', '');
+                    commit('setCallOutgoing', false);
+                    commit('setCallConnected', false);
                 }
             });
         },
 
         async makeCall({commit, state, dispatch}, recipientId) {
             // state.rtc.client.setClientRole("host");
+            commit('setCallOutgoing', true);
 
             commit('setAgoraChannel', `channel${state.currentUser.id}to${recipientId}`);
 
@@ -211,14 +235,18 @@ export default {
             await dispatch('joinAgoraChannel');
         },
 
-        async rejectCall({commit, dispatch}) {
+        async rejectCall({commit, state, dispatch}) {
             commit('setIncomingCaller', null);
-            commit('setCallIsIncoming', true);
+            commit('setCallIsIncoming', false);
             commit('setAgoraChannel', '');
 
-            // Send rejection event. Will need another API call to do this.
-            // Send the caller's ID to notify them specifically.
+            // Send rejection event.
+            await axios.post("/"+ state.agoraRoutePrefix +"/reject-call", {
+                caller_id: state.incomingCallerId,
+                recipient_id: state.currentUser.id,
+            });
 
+            commit('setIncomingCallerId', null);
         },
 
         async fetchAgoraToken({commit, state}) {
