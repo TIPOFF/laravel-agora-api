@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tipoff\LaravelAgoraApi;
 
-use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use Tipoff\LaravelAgoraApi\Http\Middleware\AuthorizeAgoraActions;
 use Tipoff\Support\TipoffPackage;
 use Tipoff\Support\TipoffServiceProvider;
 
@@ -27,9 +25,6 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
         });
 
         $this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
-
-        $router = $this->app->make(Router::class);
-        $router->aliasMiddleware('has-agora-permission', AuthorizeAgoraActions::class);
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
