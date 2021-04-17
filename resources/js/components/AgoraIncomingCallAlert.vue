@@ -8,7 +8,7 @@
                     Accept
                 </button>
 
-                <button class="agora-btn agora-btn-danger agora-btn-decline" @click="declineCall">
+                <button class="agora-btn agora-btn-danger agora-btn-decline" @click="rejectCall">
                     Decline
                 </button>
             </div>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
     name: "AgoraIncomingCallAlert",
@@ -30,13 +30,10 @@ export default {
     },
 
     methods: {
-        acceptCall: function() {
-            console.log('Call accepted.');
-        },
-        
-        declineCall: function() {
-            console.log('Call declined.');
-        }
+        ...mapActions('agora', [
+            'acceptCall',
+            'rejectCall',
+        ]),
     }
 }
 </script>

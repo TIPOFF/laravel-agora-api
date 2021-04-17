@@ -183,12 +183,6 @@ export default {
                     // involved in first before connecting to the incoming one.
                     
                     commit('setAgoraChannel', data.agoraChannel);
-
-                    commit('setCallConnected', true);
-
-                    await dispatch('fetchAgoraToken');
-            
-                    await dispatch('joinAgoraChannel');
                 }
             });
         },
@@ -207,6 +201,23 @@ export default {
             });
             
             dispatch('joinAgoraChannel');
+        },
+
+        async acceptCall({commit, dispatch}) {
+            commit('setCallIsIncoming', false);
+            commit('setCallConnected', true);
+
+            await dispatch('fetchAgoraToken');
+            await dispatch('joinAgoraChannel');
+        },
+
+        async rejectCall({commit, dispatch}) {
+            commit('setIncomingCaller', null);
+            commit('setCallIsIncoming', true);
+            commit('setAgoraChannel', '');
+
+            // Send rejection event. Will need another API call to do this. Send the caller's ID to notify them specifically.
+
         },
 
         async fetchAgoraToken({commit, state}) {
