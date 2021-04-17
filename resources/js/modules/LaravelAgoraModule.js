@@ -216,7 +216,8 @@ export default {
             commit('setCallIsIncoming', true);
             commit('setAgoraChannel', '');
 
-            // Send rejection event. Will need another API call to do this. Send the caller's ID to notify them specifically.
+            // Send rejection event. Will need another API call to do this.
+            // Send the caller's ID to notify them specifically.
 
         },
 
