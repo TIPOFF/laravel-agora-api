@@ -184,10 +184,6 @@ export default {
                     commit('setIncomingCallerId', data.senderId);
                     commit('setCallIsIncoming', true);
 
-                    // The break in flow starts here. Just set things to an "incoming"
-                    // status (including the incoming channel) and only proceed to 
-                    // connect if they click on the button.
-
                     // TODO: If they do not respond within a certain amount of time,
                     // auto-reject the call. (Including dispatching the rejected/not
                     // answered event.) await dispatch('rejectIncomingCall');
@@ -214,7 +210,7 @@ export default {
             // state.rtc.client.setClientRole("host");
             commit('setCallOutgoing', true);
 
-            commit('setAgoraChannel', `channel${state.currentUser.id}to${recipientId}`);
+            commit('setAgoraChannel', 'ac' + Math.floor(Math.random() * (99999999999 - 1111111111 + 1)) + 1111111111);
 
             await dispatch('fetchAgoraToken');
 

@@ -33,7 +33,7 @@ class AgoraController extends Controller
     public function placeCall(Request $request)
     {
         $request->validate([
-            'channel_name' => 'required|string',
+            'channel_name' => 'required|alpha_num',
             'recipient_id' => 'required|alpha_num',
         ]);
 
