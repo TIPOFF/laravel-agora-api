@@ -7,7 +7,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 use Tipoff\Authorization\Models\User;
+use Tipoff\LaravelAgoraApi\Events\AgoraCallAccepted;
 use Tipoff\LaravelAgoraApi\Events\DispatchAgoraCall;
+use Tipoff\LaravelAgoraApi\Events\RejectAgoraCall;
 use Tipoff\LaravelAgoraApi\Tests\TestCase;
 
 class AgoraControllerTest extends TestCase
@@ -87,17 +89,64 @@ class AgoraControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testNonexistentUsersCannotBeCalled()
-    {
+    public function testCallAcceptanceEventIsDispatchable() {
         Event::fake();
 
-        $response = $this->actingAs(User::factory()->create())
-            ->postJson(route('agora.place-call'), [
-                'channel_name' => $this->faker->word,
-                'recipient_id' => 'not-a-real-user-id',
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
+            ->postJson(route('agora.accept-call'), [
+                'caller_id' => User::factory()->create()->id,
+                'recipient_id' => $user->id,
             ]);
 
-        Event::assertNotDispatched(DispatchAgoraCall::class);
+        Event::assertDispatched(AgoraCallAccepted::class);
+
+        $response->assertStatus(200);
+    }
+
+    public function testCallAcceptanceEventIsNotDispatchedWhenMissingData() {
+        Event::fake();
+
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
+            ->postJson(route('agora.accept-call'), []);
+
+        Event::assertNotDispatched(AgoraCallAccepted::class);
+
+        $response->assertStatus(422);
+    }
+
+    public function testCallRejectionEventIsDispatchable() {
+        Event::fake();
+
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
+            ->postJson(route('agora.reject-call'), [
+                'caller_id' => User::factory()->create()->id,
+                'recipient_id' => $user->id,
+            ]);
+
+        Event::assertDispatched(RejectAgoraCall::class);
+
+        $response->assertStatus(200);
+    }
+
+    public function testCallRejectionEventIsNotDispatchedWhenMissingData() {
+        Event::fake();
+
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
+            ->postJson(route('agora.reject-call'), []);
+
+        Event::assertNotDispatched(RejectAgoraCall::class);
 
         $response->assertStatus(422);
     }
