@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tipoff\LaravelAgoraApi;
 
-use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use Tipoff\LaravelAgoraApi\Http\Middleware\AuthorizeAgoraActions;
 use Tipoff\Support\TipoffPackage;
 use Tipoff\Support\TipoffServiceProvider;
 
@@ -16,7 +14,8 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
     {
         $package
             ->name('agora')
-            ->hasConfigFile();
+            ->hasConfigFile('agora')
+            ->hasAssets();
     }
 
     public function boot()
@@ -27,10 +26,19 @@ class LaravelAgoraApiServiceProvider extends TipoffServiceProvider
 
         $this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
 
-        $router = $this->app->make(Router::class);
-        $router->aliasMiddleware('has-agora-permission', AuthorizeAgoraActions::class);
-
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        $this->publishes([
+            __DIR__.'/../config/agora.php' => config_path('agora.php'),
+        ], 'agora-config');
+
+        $this->publishes([
+            __DIR__.'/../resources/js' => resource_path('js/vendor/laravel-agora-api'),
+        ], 'agora-js');
+
+        $this->publishes([
+            __DIR__.'/../resources/css/agora-component-styles.css' => resource_path('css/vendor/agora-component-styles.css'),
+        ], 'agora-css');
     }
 
     protected function routeConfiguration()

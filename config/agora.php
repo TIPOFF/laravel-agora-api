@@ -9,10 +9,17 @@ return [
     'routes' => [
         'prefix' => env('AGORA_ROUTE_PREFIX', 'agora'),
         'middleware' => [
+            'web',
             'auth',
-            'has-agora-permission'
         ],
     ],
 
     'channel_name' => env('AGORA_CHANNEL_NAME', 'agora-channel'),
+
+    'user_display_name' => [
+        'fields' => [
+            'name',
+        ],
+        'separator' => ' '
+    ]
 ];

@@ -7,7 +7,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 use Tipoff\Authorization\Models\User;
+use Tipoff\LaravelAgoraApi\Events\AgoraCallAccepted;
 use Tipoff\LaravelAgoraApi\Events\DispatchAgoraCall;
+use Tipoff\LaravelAgoraApi\Events\RejectAgoraCall;
 use Tipoff\LaravelAgoraApi\Tests\TestCase;
 
 class AgoraControllerTest extends TestCase
@@ -29,25 +31,9 @@ class AgoraControllerTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function testUnauthorizedUsersCannotRetrieveAToken()
-    {
-        $response = $this->actingAs(User::factory()->create())
-            ->postJson(route('agora.retrieve-token'));
-
-        $response->assertStatus(403);
-    }
-
-    public function testUnauthorizedUsersCannotPlaceACall()
-    {
-        $response = $this->actingAs(User::factory()->create())
-            ->postJson(route('agora.place-call'));
-
-        $response->assertStatus(403);
-    }
-
     public function testInvalidRequestsDoNotReturnAToken()
     {
-        $response = $this->actingAs(self::createPermissionedUser('make video call', true))
+        $response = $this->actingAs(User::factory()->create())
             ->postJson(route('agora.retrieve-token'));
 
         $response->assertStatus(422);
@@ -55,7 +41,7 @@ class AgoraControllerTest extends TestCase
 
     public function testInvalidRequestsDoNotReturnPlaceACall()
     {
-        $response = $this->actingAs(self::createPermissionedUser('make video call', true))
+        $response = $this->actingAs(User::factory()->create())
             ->postJson(route('agora.place-call'));
 
         $response->assertStatus(422);
@@ -64,11 +50,15 @@ class AgoraControllerTest extends TestCase
     public function testAuthorizedUsersCanRetrieveAToken()
     {
         $fakeTokenContents = 'an-Agora-token';
-        
-        $mock = Mockery::mock('overload:Tipoff\LaravelAgoraApi\AgoraDynamicKey\RtcTokenBuilder')->makePartial();
-        $mock->shouldReceive('buildTokenWithUserAccount')->once()->andReturn($fakeTokenContents);
 
-        $response = $this->actingAs(self::createPermissionedUser('make video call', true))
+        Mockery::namedMock('Tipoff\LaravelAgoraApi\AgoraDynamicKey\RtcTokenBuilder', 'Tipoff\LaravelAgoraApi\Tests\Feature\Http\RtcTokenBuilderStub')
+            ->shouldReceive('buildTokenWithUid')
+            ->andReturn($fakeTokenContents);
+
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
             ->postJson(route('agora.retrieve-token'), [
                 'channel_name' => $this->faker->word,
             ]);
@@ -85,7 +75,10 @@ class AgoraControllerTest extends TestCase
     {
         Event::fake();
 
-        $response = $this->actingAs(self::createPermissionedUser('make video call', true))
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
             ->postJson(route('agora.place-call'), [
                 'channel_name' => $this->faker->word,
                 'recipient_id' => User::factory()->create()->id,
@@ -95,4 +88,78 @@ class AgoraControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function testCallAcceptanceEventIsDispatchable()
+    {
+        Event::fake();
+
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
+            ->postJson(route('agora.accept-call'), [
+                'caller_id' => User::factory()->create()->id,
+                'recipient_id' => $user->id,
+            ]);
+
+        Event::assertDispatched(AgoraCallAccepted::class);
+
+        $response->assertStatus(200);
+    }
+
+    public function testCallAcceptanceEventIsNotDispatchedWhenMissingData()
+    {
+        Event::fake();
+
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
+            ->postJson(route('agora.accept-call'), []);
+
+        Event::assertNotDispatched(AgoraCallAccepted::class);
+
+        $response->assertStatus(422);
+    }
+
+    public function testCallRejectionEventIsDispatchable()
+    {
+        Event::fake();
+
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
+            ->postJson(route('agora.reject-call'), [
+                'caller_id' => User::factory()->create()->id,
+                'recipient_id' => $user->id,
+            ]);
+
+        Event::assertDispatched(RejectAgoraCall::class);
+
+        $response->assertStatus(200);
+    }
+
+    public function testCallRejectionEventIsNotDispatchedWhenMissingData()
+    {
+        Event::fake();
+
+        $user = User::factory()->create();
+        $user->name = 'John Doe';
+
+        $response = $this->actingAs($user)
+            ->postJson(route('agora.reject-call'), []);
+
+        Event::assertNotDispatched(RejectAgoraCall::class);
+
+        $response->assertStatus(422);
+    }
+}
+
+class RtcTokenBuilderStub
+{
+    const RoleAttendee = 0;
+    const RolePublisher = 1;
+    const RoleSubscriber = 2;
+    const RoleAdmin = 101;
 }

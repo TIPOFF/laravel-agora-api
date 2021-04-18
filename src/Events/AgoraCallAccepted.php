@@ -8,15 +8,13 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class DispatchAgoraCall implements ShouldBroadcast
+class AgoraCallAccepted implements ShouldBroadcast
 {
     use Dispatchable;
     use InteractsWithSockets;
     use SerializesModels;
 
-    public $agoraChannel;
-    public $senderId;
-    public $senderDisplayName;
+    public $callerId;
     public $recipientId;
 
     /**
@@ -24,11 +22,9 @@ class DispatchAgoraCall implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($agoraChannel, $senderId, $senderDisplayName, $recipientId)
+    public function __construct($callerId, $recipientId)
     {
-        $this->agoraChannel = $agoraChannel;
-        $this->senderId = $senderId;
-        $this->senderDisplayName = $senderDisplayName;
+        $this->callerId = $callerId;
         $this->recipientId = $recipientId;
     }
 
